@@ -32,9 +32,25 @@ class FakeLedgerRepository(
 
     override suspend fun upsertCustomer(customer: Customer): Long = customer.id
 
+    override suspend fun addCustomer(name: String, phoneHint: String?): Long {
+        val id = (customers.maxOfOrNull { it.id } ?: 0L) + 1
+        customers = customers + Customer(id = id, name = name, phoneHint = phoneHint)
+        return id
+    }
+
     override suspend fun insertTransaction(txn: Transaction): Long = txn.id
 
     override suspend fun updateTransactionStatus(id: Long, status: TxnStatus) { /* no-op */ }
+
+    override suspend fun updateTransaction(txn: Transaction) {
+        recent = recent.map { if (it.id == txn.id) txn else it }
+    }
+
+    override suspend fun deleteTransaction(id: Long) {
+        recent = recent.filterNot { it.id == id }
+    }
+
+    override suspend fun getTransaction(id: Long): Transaction? = recent.firstOrNull { it.id == id }
 
     override suspend fun recentTransactions(limit: Int): List<Transaction> = recent.take(limit)
 
@@ -46,9 +62,18 @@ class FakeLedgerRepository(
 
     override fun observeTodayTransactions(): Flow<List<Transaction>> = MutableStateFlow(recent)
 
+    override fun observeTransactionsForCustomer(customerId: Long): Flow<List<Transaction>> =
+        MutableStateFlow(recent.filter { it.customerId == customerId })
+
     override suspend fun getInventory(): List<InventoryItem> = inventory
 
     override suspend fun adjustStock(item: String, qtyDelta: Double) { /* no-op */ }
+
+    override suspend fun addInventoryItem(item: InventoryItem): Long {
+        val id = (inventory.maxOfOrNull { it.id } ?: 0L) + 1
+        inventory = inventory + item.copy(id = id)
+        return id
+    }
 
     override fun observeInventory(): Flow<List<InventoryItem>> = MutableStateFlow(inventory)
 

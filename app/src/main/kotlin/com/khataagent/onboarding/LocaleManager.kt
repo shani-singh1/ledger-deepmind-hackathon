@@ -45,6 +45,11 @@ class LocaleManager(context: Context) {
         applyLocale(appContext, tag)
     }
 
+    /** Forget the chosen language so the next launch/recreate shows the onboarding picker again. */
+    fun clear() {
+        prefs.edit().remove(KEY_LANGUAGE_TAG).apply()
+    }
+
     companion object {
         private const val PREFS_NAME = "khata_locale_prefs"
         private const val KEY_LANGUAGE_TAG = "language_tag"

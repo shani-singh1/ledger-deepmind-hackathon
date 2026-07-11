@@ -164,6 +164,31 @@ class AgentOrchestratorTest {
             DailyState(date = date, txnCount = transactions.size)
 
         override fun observeDailyState(date: String): Flow<DailyState> = MutableStateFlow(DailyState(date = date))
+
+        override fun observeTransactionsForCustomer(customerId: Long): Flow<List<Transaction>> =
+            MutableStateFlow(transactions.filter { it.customerId == customerId })
+
+        override suspend fun addCustomer(name: String, phoneHint: String?): Long {
+            val id = (customers.size + 1).toLong()
+            customers.add(Customer(id = id, name = name, phoneHint = phoneHint))
+            return id
+        }
+
+        override suspend fun updateTransaction(txn: Transaction) {
+            val i = transactions.indexOfFirst { it.id == txn.id }
+            if (i >= 0) transactions[i] = txn
+        }
+
+        override suspend fun deleteTransaction(id: Long) {
+            transactions.removeAll { it.id == id }
+        }
+
+        override suspend fun getTransaction(id: Long): Transaction? = transactions.firstOrNull { it.id == id }
+
+        override suspend fun addInventoryItem(item: InventoryItem): Long {
+            inventory.add(item)
+            return inventory.size.toLong()
+        }
     }
 
     /**

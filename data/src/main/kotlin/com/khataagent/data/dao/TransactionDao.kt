@@ -3,6 +3,7 @@ package com.khataagent.data.dao
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 import com.khataagent.data.entity.TransactionEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -22,6 +23,16 @@ interface TransactionDao {
 
     @Query("UPDATE transactions SET status = :status WHERE id = :id")
     suspend fun updateStatus(id: Long, status: String)
+
+    /** Full-row update — backs the edit-transaction sheet (amount/item/note/type edits). */
+    @Update
+    suspend fun update(txn: TransactionEntity)
+
+    @Query("DELETE FROM transactions WHERE id = :id")
+    suspend fun delete(id: Long)
+
+    @Query("SELECT * FROM transactions WHERE id = :id LIMIT 1")
+    suspend fun getById(id: Long): TransactionEntity?
 
     @Query("SELECT * FROM transactions ORDER BY createdAt DESC LIMIT :limit")
     suspend fun recent(limit: Int): List<TransactionEntity>

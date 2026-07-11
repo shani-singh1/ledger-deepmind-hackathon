@@ -57,6 +57,19 @@ class FakeLedgerRepository : LedgerRepository {
 
     override suspend fun allCustomers(): List<Customer> = _customers.value
 
+    override suspend fun addCustomer(name: String, phoneHint: String?): Long = mutex.withLock {
+        val id = customerIds.getAndIncrement()
+        val customer = Customer(
+            id = id,
+            name = name,
+            phoneHint = phoneHint,
+            namePhonetic = Phonetic.key(name),
+            createdAt = System.currentTimeMillis(),
+        )
+        _customers.value = _customers.value + customer
+        id
+    }
+
     override suspend fun upsertCustomer(customer: Customer): Long = mutex.withLock {
         if (customer.id != 0L) {
             _customers.value = _customers.value.map { if (it.id == customer.id) customer else it }
@@ -83,6 +96,17 @@ class FakeLedgerRepository : LedgerRepository {
             if (it.id == id) it.copy(status = status) else it
         }
     }
+
+    override suspend fun updateTransaction(txn: Transaction): Unit = mutex.withLock {
+        _transactions.value = _transactions.value.map { if (it.id == txn.id) txn else it }
+    }
+
+    override suspend fun deleteTransaction(id: Long): Unit = mutex.withLock {
+        _transactions.value = _transactions.value.filterNot { it.id == id }
+    }
+
+    override suspend fun getTransaction(id: Long): Transaction? =
+        _transactions.value.firstOrNull { it.id == id }
 
     override suspend fun recentTransactions(limit: Int): List<Transaction> =
         _transactions.value.sortedByDescending { it.createdAt }.take(limit)
@@ -123,6 +147,12 @@ class FakeLedgerRepository : LedgerRepository {
         _inventory.value = _inventory.value.map {
             if (it.item.equals(item, ignoreCase = true)) it.copy(qty = (it.qty + qtyDelta).coerceAtLeast(0.0)) else it
         }
+    }
+
+    override suspend fun addInventoryItem(item: InventoryItem): Long = mutex.withLock {
+        val id = _inventory.value.maxOfOrNull { it.id }?.plus(1) ?: 1L
+        _inventory.value = _inventory.value + item.copy(id = id)
+        id
     }
 
     override fun observeInventory(): Flow<List<InventoryItem>> = _inventory

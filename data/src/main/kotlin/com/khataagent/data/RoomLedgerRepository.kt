@@ -13,6 +13,7 @@ import com.khataagent.data.dao.CustomerDao
 import com.khataagent.data.dao.DeferralDao
 import com.khataagent.data.dao.InventoryDao
 import com.khataagent.data.dao.TransactionDao
+import com.khataagent.data.entity.CustomerEntity
 import com.khataagent.data.entity.InventoryEntity
 import com.khataagent.data.entity.toDomain
 import com.khataagent.data.entity.toEntity
@@ -41,6 +42,17 @@ class RoomLedgerRepository(
 
     override suspend fun allCustomers(): List<Customer> =
         customerDao.allCustomers().map { it.toDomain() }
+
+    /** Manual "add customer" entry point — always inserts a fresh row (no merge-by-name). */
+    override suspend fun addCustomer(name: String, phoneHint: String?): Long =
+        customerDao.insert(
+            CustomerEntity(
+                name = name,
+                phoneHint = phoneHint,
+                namePhonetic = Phonetic.key(name),
+                createdAt = System.currentTimeMillis(),
+            )
+        )
 
     /**
      * Merge-by-name upsert. Always (re)computes namePhonetic via [Phonetic.key] so fuzzy lookup
@@ -77,6 +89,15 @@ class RoomLedgerRepository(
     override suspend fun updateTransactionStatus(id: Long, status: TxnStatus) =
         transactionDao.updateStatus(id, status.name)
 
+    override suspend fun updateTransaction(txn: Transaction) =
+        transactionDao.update(txn.toEntity())
+
+    override suspend fun deleteTransaction(id: Long) =
+        transactionDao.delete(id)
+
+    override suspend fun getTransaction(id: Long): Transaction? =
+        transactionDao.getById(id)?.toDomain()
+
     override suspend fun recentTransactions(limit: Int): List<Transaction> =
         transactionDao.recent(limit).map { it.toDomain() }
 
@@ -107,6 +128,9 @@ class RoomLedgerRepository(
             inventoryDao.adjustStock(item, qtyDelta)
         }
     }
+
+    override suspend fun addInventoryItem(item: InventoryItem): Long =
+        inventoryDao.insert(item.toEntity())
 
     override fun observeInventory(): Flow<List<InventoryItem>> =
         inventoryDao.observeAll().map { list -> list.map { it.toDomain() } }

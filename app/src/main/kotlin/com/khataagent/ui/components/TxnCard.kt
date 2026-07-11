@@ -1,6 +1,7 @@
 package com.khataagent.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -60,10 +61,11 @@ private val timeFormat = SimpleDateFormat("h:mm a", Locale.getDefault())
  * Reads like an actual account-book row, not a chat bubble.
  */
 @Composable
-fun TxnCard(txn: Transaction, modifier: Modifier = Modifier) {
+fun TxnCard(txn: Transaction, modifier: Modifier = Modifier, onClick: (() -> Unit)? = null) {
     val color = txnTypeColor(txn.type)
+    val clickableModifier = if (onClick != null) modifier.clickable(onClick = onClick) else modifier
     Card(
-        modifier = modifier.fillMaxWidth(),
+        modifier = clickableModifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
         shape = RoundedCornerShape(14.dp),

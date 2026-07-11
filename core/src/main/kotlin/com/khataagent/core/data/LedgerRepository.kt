@@ -19,10 +19,16 @@ interface LedgerRepository {
     suspend fun searchByPhonetic(phoneticKey: String): List<Customer>
     suspend fun allCustomers(): List<Customer>
     suspend fun upsertCustomer(customer: Customer): Long
+    /** Manual "add customer" entry point (ledger management UI). Computes namePhonetic internally. */
+    suspend fun addCustomer(name: String, phoneHint: String?): Long
 
     // ---- transactions ----
     suspend fun insertTransaction(txn: Transaction): Long
     suspend fun updateTransactionStatus(id: Long, status: TxnStatus)
+    /** Full field update (amount/item/note/type/etc) — backs the edit-transaction sheet. */
+    suspend fun updateTransaction(txn: Transaction)
+    suspend fun deleteTransaction(id: Long)
+    suspend fun getTransaction(id: Long): Transaction?
     suspend fun recentTransactions(limit: Int): List<Transaction>
     suspend fun transactionsSince(sinceMillis: Long): List<Transaction>
     suspend fun outstandingBalance(customerId: Long): Double
@@ -33,6 +39,7 @@ interface LedgerRepository {
     // ---- inventory ----
     suspend fun getInventory(): List<InventoryItem>
     suspend fun adjustStock(item: String, qtyDelta: Double)
+    suspend fun addInventoryItem(item: InventoryItem): Long
     fun observeInventory(): Flow<List<InventoryItem>>
 
     // ---- deferral log ----
