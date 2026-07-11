@@ -1,0 +1,12 @@
+.gradle/
+build/
+local.properties
+.idea/
+*.iml
+.env
+captures/
+.externalNativeBuild/
+.cxx/
+*.litertlm
+*.apk
+gemma4-model/
