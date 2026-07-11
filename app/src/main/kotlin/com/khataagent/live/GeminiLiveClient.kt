@@ -34,8 +34,8 @@ import java.util.concurrent.TimeUnit
  */
 class GeminiLiveClient(
     private val apiKey: String,
-    private val primaryModel: String = "models/gemini-live-2.5-flash-native-audio",
-    private val fallbackModel: String = "models/gemini-2.0-flash-live-001",
+    private val primaryModel: String = "models/gemini-2.5-flash-native-audio-latest",
+    private val fallbackModel: String = "models/gemini-3.1-flash-live-preview",
 ) {
 
     sealed class LiveStatus {
