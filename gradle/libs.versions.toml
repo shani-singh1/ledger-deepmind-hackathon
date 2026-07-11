@@ -12,8 +12,9 @@ navigationCompose = "2.9.0"
 room = "2.7.1"
 okhttp = "4.12.0"
 junit = "4.13.2"
-# LiteRT-LM / MediaPipe GenAI on-device inference (Google Maven, not Central)
-mediapipeGenai = "0.10.35"
+# LiteRT-LM on-device inference — the native runtime the AI Edge Gallery uses for .litertlm
+# (handles the GPU OpenCL delegate that mediapipe tasks-genai fails to attach). Google Maven.
+litertlm = "0.11.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -39,7 +40,7 @@ androidx-room-runtime = { group = "androidx.room", name = "room-runtime", versio
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 
-mediapipe-tasks-genai = { group = "com.google.mediapipe", name = "tasks-genai", version.ref = "mediapipeGenai" }
+litertlm-android = { group = "com.google.ai.edge.litertlm", name = "litertlm-android", version.ref = "litertlm" }
 
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
