@@ -125,9 +125,18 @@ class AgentOrchestrator(
     }
 
     private suspend fun runTurn(input: TurnInput) {
-        _state.value = TurnState.Inferring
-
         val utteranceText = (input as? TurnInput.Text)?.text
+
+        // Deterministic chit-chat guard: a typed line with no number AND no ledger keyword is a
+        // greeting / question, not a khata entry. Small on-device models otherwise hallucinate a
+        // fake transaction from it — short-circuit to gentle guidance instead of calling the model.
+        if (utteranceText != null && !looksLikeLedgerCommand(utteranceText)) {
+            _state.value = TurnState.Inferring
+            deferAndLog(chitChatCard(utteranceText))
+            return
+        }
+
+        _state.value = TurnState.Inferring
         var retryError: String? = null
         var raw: String
         var parsed: ToolParseResult
@@ -190,6 +199,23 @@ class AgentOrchestrator(
         )
         deferAndLog(card)
     }
+
+    /** A ledger command almost always has a number (amount/qty) or a known ledger keyword. */
+    private fun looksLikeLedgerCommand(text: String): Boolean {
+        val t = text.lowercase()
+        if (t.any { it.isDigit() }) return true
+        return LEDGER_KEYWORDS.any { t.contains(it) }
+    }
+
+    private fun chitChatCard(text: String): ConfirmCard = ConfirmCard(
+        turnId = UUID.randomUUID().toString(),
+        understoodAs = ToolCall.AskClarification(
+            "I only keep your shop's khata. Please say an entry — like \"Ramesh ko 250 udhaar\" or \"Sita ne 500 diya\".",
+        ),
+        humanReason = "That doesn't look like a khata entry.",
+        rawModelOutput = text,
+        kind = DeferKind.CLARIFICATION,
+    )
 
     private fun clarificationCard(call: ToolCall.AskClarification): ConfirmCard = ConfirmCard(
         turnId = UUID.randomUUID().toString(),
@@ -320,6 +346,14 @@ class AgentOrchestrator(
     companion object {
         const val MAX_RETRY_ATTEMPTS = 1
         const val DEFAULT_TURN_TIMEOUT_MILLIS = 20_000L
+
+        /** Words that signal a real ledger command (used by the chit-chat guard). */
+        private val LEDGER_KEYWORDS = listOf(
+            "udhaar", "udhar", "credit", "likho", "likh", "diya", "diye", "payment", "jama", "paid",
+            "chuka", "becha", "bech", "sale", "sold", "bik", "stock", "restock", "mangwaya",
+            "balance", "baaki", "dena", "lena", "kitna", "total", "hisaab", "aaj ka", "today",
+            "close", "band karo", "khata", "rupee", "rupaye", "paisa",
+        )
 
         /** Mirrors ValidationContext's default duplicateWindowMillis in :core (120s). */
         private const val DUPLICATE_WINDOW_MILLIS = 120_000L
