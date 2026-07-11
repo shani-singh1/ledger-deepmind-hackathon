@@ -30,9 +30,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.khataagent.R
 import com.khataagent.core.data.LedgerRepository
 import com.khataagent.fake.FakeLedgerRepository
 import com.khataagent.ui.SimpleViewModelFactory
@@ -80,7 +82,7 @@ private fun CustomerListContent(
         customers.isEmpty() -> {
             Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 Text(
-                    text = "No customers yet — they'll show up here once you log a credit or sale.",
+                    text = stringResource(R.string.customers_empty_state),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -94,7 +96,7 @@ private fun CustomerListContent(
             ) {
                 item {
                     Text(
-                        text = "Customers",
+                        text = stringResource(R.string.customers_title),
                         style = MaterialTheme.typography.headlineSmall,
                         color = MaterialTheme.colorScheme.onBackground,
                         modifier = Modifier.padding(bottom = 4.dp),
@@ -163,7 +165,7 @@ private fun CustomerRow(entry: CustomerBalance, onClick: () -> Unit) {
                     style = MoneyType.bodyAmount,
                 )
                 Text(
-                    text = if (owesMoney) "owes" else "settled",
+                    text = if (owesMoney) stringResource(R.string.customer_owes) else stringResource(R.string.customer_settled),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )

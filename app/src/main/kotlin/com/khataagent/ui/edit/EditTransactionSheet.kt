@@ -36,10 +36,12 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.khataagent.R
 import com.khataagent.core.data.LedgerRepository
 import com.khataagent.core.model.Transaction
 import com.khataagent.core.model.TxnType
@@ -50,10 +52,11 @@ import com.khataagent.ui.theme.KhataTheme
 import com.khataagent.ui.theme.KhataThemeExtras
 import kotlinx.coroutines.launch
 
+@Composable
 private fun txnTypeChipLabel(type: TxnType): String = when (type) {
-    TxnType.CREDIT -> "Credit"
-    TxnType.PAYMENT -> "Payment"
-    TxnType.SALE -> "Sale"
+    TxnType.CREDIT -> stringResource(R.string.txn_type_credit)
+    TxnType.PAYMENT -> stringResource(R.string.txn_type_payment)
+    TxnType.SALE -> stringResource(R.string.txn_type_sale)
 }
 
 /**
@@ -108,6 +111,7 @@ private fun EditTransactionSheetContent(
     var error by remember(txn.id) { mutableStateOf<String?>(null) }
     var saving by remember(txn.id) { mutableStateOf(false) }
     var confirmingDelete by remember(txn.id) { mutableStateOf(false) }
+    val invalidAmountError = stringResource(R.string.edit_txn_error_invalid_amount)
 
     Column(
         modifier = Modifier
@@ -118,12 +122,12 @@ private fun EditTransactionSheetContent(
         Row(verticalAlignment = Alignment.CenterVertically) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = "Edit Entry",
+                    text = stringResource(R.string.edit_txn_header),
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
                 Text(
-                    text = txn.customerName?.capitalizeWords() ?: "Walk-in",
+                    text = txn.customerName?.capitalizeWords() ?: stringResource(R.string.txn_walk_in),
                     style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.onSurface,
                 )
@@ -164,7 +168,7 @@ private fun EditTransactionSheetContent(
         Spacer(modifier = Modifier.height(18.dp))
 
         Text(
-            text = "AMOUNT",
+            text = stringResource(R.string.edit_txn_amount_label),
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
@@ -188,7 +192,7 @@ private fun EditTransactionSheetContent(
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
-            text = "ITEM (OPTIONAL)",
+            text = stringResource(R.string.edit_txn_item_label),
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
@@ -202,13 +206,13 @@ private fun EditTransactionSheetContent(
             singleLine = true,
             shape = RoundedCornerShape(14.dp),
             textStyle = MaterialTheme.typography.bodyLarge,
-            placeholder = { Text("e.g. rice, sugar") },
+            placeholder = { Text(stringResource(R.string.edit_txn_item_placeholder)) },
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
-            text = "NOTE (OPTIONAL)",
+            text = stringResource(R.string.edit_txn_note_label),
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
@@ -222,7 +226,7 @@ private fun EditTransactionSheetContent(
             singleLine = true,
             shape = RoundedCornerShape(14.dp),
             textStyle = MaterialTheme.typography.bodyLarge,
-            placeholder = { Text("Any extra detail") },
+            placeholder = { Text(stringResource(R.string.edit_txn_note_placeholder)) },
         )
 
         if (error != null) {
@@ -248,13 +252,13 @@ private fun EditTransactionSheetContent(
                 ) {
                     Icon(Icons.Filled.Delete, contentDescription = null, modifier = Modifier.size(18.dp))
                     Spacer(modifier = Modifier.size(6.dp))
-                    Text("Delete")
+                    Text(stringResource(R.string.edit_txn_delete))
                 }
                 Button(
                     onClick = {
                         val amount = amountText.toDoubleOrNull()
                         if (amount == null || amount <= 0.0) {
-                            error = "Enter a valid amount."
+                            error = invalidAmountError
                             return@Button
                         }
                         saving = true
@@ -286,7 +290,7 @@ private fun EditTransactionSheetContent(
                             strokeWidth = 2.dp,
                         )
                     } else {
-                        Text("Save Changes")
+                        Text(stringResource(R.string.edit_txn_save_changes))
                     }
                 }
             }
@@ -298,14 +302,14 @@ private fun EditTransactionSheetContent(
                     .padding(16.dp),
             ) {
                 Text(
-                    text = "Delete this entry?",
+                    text = stringResource(R.string.edit_txn_delete_confirm_title),
                     style = MaterialTheme.typography.titleMedium,
                     color = extras.credit,
                     fontWeight = FontWeight.SemiBold,
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = "This cannot be undone. The transaction will be removed from the khata.",
+                    text = stringResource(R.string.edit_txn_delete_confirm_body),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurface,
                 )
@@ -321,7 +325,7 @@ private fun EditTransactionSheetContent(
                             .height(48.dp),
                         shape = RoundedCornerShape(14.dp),
                     ) {
-                        Text("Cancel")
+                        Text(stringResource(R.string.action_cancel))
                     }
                     Button(
                         onClick = {
@@ -346,7 +350,7 @@ private fun EditTransactionSheetContent(
                                 strokeWidth = 2.dp,
                             )
                         } else {
-                            Text("Yes, Delete")
+                            Text(stringResource(R.string.edit_txn_confirm_delete))
                         }
                     }
                 }

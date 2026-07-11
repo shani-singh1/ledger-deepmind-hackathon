@@ -1,7 +1,14 @@
 <resources>
+    <string name="app_name">KhataAgent</string>
     <string name="nav_today">ఈరోజు</string>
     <string name="nav_log">ఏజెంట్ లాగ్</string>
     <string name="nav_insights">ఇన్‌సైట్స్</string>
+    <string name="nav_customers">కస్టమర్లు</string>
+    <string name="nav_reports">నివేదికలు</string>
+    <string name="nav_inventory">ఇన్వెంటరీ</string>
+    <string name="nav_settings">సెట్టింగ్‌లు</string>
+    <string name="add_customer">కస్టమర్‌ను జోడించండి</string>
+    <string name="menu_more">మరిన్ని</string>
     <string name="cd_simulate_offline">ఆఫ్‌లైన్‌గా అనుకరించండి</string>
     <string name="cd_simulate_online">ఆన్‌లైన్‌గా అనుకరించండి</string>
 
@@ -54,4 +61,93 @@
 
     <string name="onboarding_title">మీ భాషను ఎంచుకోండి</string>
     <string name="onboarding_subtitle">మీకు నచ్చిన భాషను ఎంచుకోండి</string>
+
+    <string name="action_cancel">రద్దు చేయండి</string>
+
+    <string name="txn_type_credit">అరువు</string>
+    <string name="txn_type_payment">చెల్లింపు</string>
+    <string name="txn_type_sale">అమ్మకం</string>
+    <string name="txn_walk_in">వాక్-ఇన్</string>
+
+    <string name="unit_kg">కిలో</string>
+    <string name="unit_g">గ్రాము</string>
+    <string name="unit_l">లీటరు</string>
+    <string name="unit_ml">మిల్లీ</string>
+    <string name="unit_pcs">పీస్‌లు</string>
+    <string name="unit_dozen">డజను</string>
+
+    <string name="reports_title">నివేదికలు</string>
+    <string name="reports_period_today">ఈరోజు</string>
+    <string name="reports_period_week">ఈ వారం</string>
+    <string name="reports_credit">అరువు</string>
+    <string name="reports_payments">చెల్లింపులు</string>
+    <string name="reports_net">నికర</string>
+    <string name="reports_txn_count_one">%1$d లావాదేవీ</string>
+    <string name="reports_txn_count_other">%1$d లావాదేవీలు</string>
+    <string name="reports_share_button">నివేదికను షేర్ చేయండి</string>
+    <string name="reports_top_debtors">అత్యధిక బాకీదారులు</string>
+    <string name="reports_no_debtors">ప్రస్తుతం ఎవరూ మీకు బాకీ లేరు — అందరు కస్టమర్ల ఖాతా సరిపోయింది.</string>
+    <string name="reports_share_subject">KhataAgent నివేదిక — %1$s</string>
+    <string name="reports_share_none">ఎవరూ లేరు</string>
+    <string name="reports_share_header">KhataAgent — %1$s — %2$s</string>
+    <string name="reports_share_today_line">అరువు %1$s చెల్లింపులు %2$s</string>
+    <string name="reports_share_week_line">ఈ వారం: అరువు %1$s చెల్లింపులు %2$s (%3$d లావాదేవీలు)</string>
+    <string name="reports_share_debtors_line">అత్యధిక బాకీదారులు: %1$s</string>
+
+    <string name="inventory_title">ఇన్వెంటరీ</string>
+    <string name="inventory_low_chip">తక్కువ</string>
+    <string name="inventory_empty_state">ఇంకా సరుకు లేదు — అమ్మకాలు నమోదు చేసినప్పుడు ఇన్వెంటరీ అప్‌డేట్ అవుతుంది.</string>
+    <string name="inventory_cd_decrease">%1$s తగ్గించండి</string>
+    <string name="inventory_cd_increase">%1$s పెంచండి</string>
+
+    <string name="settings_title">సెట్టింగ్‌లు</string>
+    <string name="settings_shop_details">దుకాణం వివరాలు</string>
+    <string name="settings_shop_name_label">దుకాణం / వ్యాపార పేరు</string>
+    <string name="settings_daily_limit_label">రోజువారీ ఒకే-లావాదేవీ పరిమితి (₹)</string>
+    <string name="settings_daily_limit_hint">ఈ మొత్తానికి మించిన ఏదైనా అరువు లేదా చెల్లింపు కోసం ఏజెంట్ మీ నుండి నిర్ధారణ కోరుతుంది.</string>
+    <string name="settings_save">సేవ్ చేయండి</string>
+    <string name="settings_saved">సేవ్ అయింది</string>
+    <string name="settings_language_title">భాష</string>
+    <string name="settings_language_subtitle">ఏజెంట్ వినే మరియు మాట్లాడే భాషను మార్చండి.</string>
+    <string name="settings_change_language">భాషను మార్చండి</string>
+
+    <string name="customers_title">కస్టమర్లు</string>
+    <string name="customers_empty_state">ఇంకా కస్టమర్లు లేరు — మీరు అరువు లేదా అమ్మకం నమోదు చేయగానే వారు ఇక్కడ కనిపిస్తారు.</string>
+    <string name="customer_owes">బాకీ ఉంది</string>
+    <string name="customer_settled">సరిపోయింది</string>
+
+    <string name="customer_detail_cd_back">కస్టమర్‌లకు తిరిగి వెళ్ళండి</string>
+    <string name="customer_detail_default_name">కస్టమర్</string>
+    <string name="customer_detail_empty_txns">ఈ కస్టమర్ కోసం ఇంకా లావాదేవీలు లేవు.</string>
+    <string name="customer_detail_send_reminder">రిమైండర్ పంపండి</string>
+    <string name="customer_detail_balance_label">బాకీ మొత్తం</string>
+    <string name="customer_detail_owes_you">%1$s వద్ద మీ బాకీ ఉంది</string>
+    <string name="customer_detail_default_customer">ఈ కస్టమర్</string>
+    <string name="customer_detail_fully_settled">పూర్తిగా సరిపోయింది</string>
+    <string name="customer_reminder_message">నమస్తే %1$s గారు, మా వద్ద మీ %2$s బాకీ ఉంది. ధన్యవాదాలు.</string>
+
+    <string name="add_customer_title">కస్టమర్‌ను జోడించండి</string>
+    <string name="add_customer_name_label">కస్టమర్ పేరు</string>
+    <string name="add_customer_name_placeholder">ఉదా. రమేష్ కుమార్</string>
+    <string name="add_customer_phone_label">ఫోన్ నంబర్ (ఐచ్ఛికం)</string>
+    <string name="add_customer_phone_placeholder">10-అంకెల మొబైల్ నంబర్</string>
+    <string name="add_customer_opening_balance_label">ప్రారంభ బాకీ (ఐచ్ఛికం)</string>
+    <string name="add_customer_opening_balance_placeholder">₹0 — ఇప్పటికే ఏదైనా బాకీ ఉంటే</string>
+    <string name="add_customer_save">కస్టమర్‌ను సేవ్ చేయండి</string>
+    <string name="add_customer_error_name_required">దయచేసి కస్టమర్ పేరును నమోదు చేయండి.</string>
+    <string name="add_customer_error_phone_length">ఫోన్ నంబర్ 10 అంకెలు ఉండాలి — లేదా ఖాళీగా వదిలేయండి.</string>
+    <string name="add_customer_error_balance_invalid">ప్రారంభ బాకీ చెల్లుబాటు అయ్యే మొత్తం అయి ఉండాలి.</string>
+
+    <string name="edit_txn_header">ఎంట్రీని సవరించండి</string>
+    <string name="edit_txn_amount_label">మొత్తం</string>
+    <string name="edit_txn_item_label">వస్తువు (ఐచ్ఛికం)</string>
+    <string name="edit_txn_item_placeholder">ఉదా. బియ్యం, చక్కెర</string>
+    <string name="edit_txn_note_label">నోట్ (ఐచ్ఛికం)</string>
+    <string name="edit_txn_note_placeholder">ఏదైనా అదనపు వివరం</string>
+    <string name="edit_txn_delete">తొలగించండి</string>
+    <string name="edit_txn_save_changes">మార్పులను సేవ్ చేయండి</string>
+    <string name="edit_txn_error_invalid_amount">చెల్లుబాటు అయ్యే మొత్తాన్ని నమోదు చేయండి.</string>
+    <string name="edit_txn_delete_confirm_title">ఈ ఎంట్రీని తొలగించాలా?</string>
+    <string name="edit_txn_delete_confirm_body">దీన్ని వెనక్కి తీసుకోలేరు. ఈ లావాదేవీ ఖాతా నుండి తీసివేయబడుతుంది.</string>
+    <string name="edit_txn_confirm_delete">అవును, తొలగించండి</string>
 </resources>

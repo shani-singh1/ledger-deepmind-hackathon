@@ -1,7 +1,14 @@
 <resources>
+    <string name="app_name">KhataAgent</string>
     <string name="nav_today">இன்று</string>
     <string name="nav_log">ஏஜென்ட் பதிவு</string>
     <string name="nav_insights">நுண்ணறிவுகள்</string>
+    <string name="nav_customers">வாடிக்கையாளர்கள்</string>
+    <string name="nav_reports">அறிக்கைகள்</string>
+    <string name="nav_inventory">இருப்பு</string>
+    <string name="nav_settings">அமைப்புகள்</string>
+    <string name="add_customer">வாடிக்கையாளரைச் சேர்</string>
+    <string name="menu_more">மேலும்</string>
     <string name="cd_simulate_offline">ஆஃப்லைனாக மாற்றி காட்டு</string>
     <string name="cd_simulate_online">ஆன்லைனாக மாற்றி காட்டு</string>
 
@@ -54,4 +61,93 @@
 
     <string name="onboarding_title">உங்கள் மொழியைத் தேர்ந்தெடுக்கவும்</string>
     <string name="onboarding_subtitle">உங்களுக்கு விருப்பமான மொழியைத் தேர்ந்தெடுக்கவும்</string>
+
+    <string name="action_cancel">ரத்துசெய்</string>
+
+    <string name="txn_type_credit">கடன்</string>
+    <string name="txn_type_payment">பணம் செலுத்தியது</string>
+    <string name="txn_type_sale">விற்பனை</string>
+    <string name="txn_walk_in">வாக்-இன்</string>
+
+    <string name="unit_kg">கிலோ</string>
+    <string name="unit_g">கிராம்</string>
+    <string name="unit_l">லிட்டர்</string>
+    <string name="unit_ml">மிலி</string>
+    <string name="unit_pcs">பீஸ்</string>
+    <string name="unit_dozen">டஜன்</string>
+
+    <string name="reports_title">அறிக்கைகள்</string>
+    <string name="reports_period_today">இன்று</string>
+    <string name="reports_period_week">இந்த வாரம்</string>
+    <string name="reports_credit">கடன்</string>
+    <string name="reports_payments">பணம் செலுத்தியது</string>
+    <string name="reports_net">நிகர</string>
+    <string name="reports_txn_count_one">%1$d பரிவர்த்தனை</string>
+    <string name="reports_txn_count_other">%1$d பரிவர்த்தனைகள்</string>
+    <string name="reports_share_button">அறிக்கையைப் பகிர்</string>
+    <string name="reports_top_debtors">அதிகம் கடன்பட்டோர்</string>
+    <string name="reports_no_debtors">இப்போது யாரும் உங்களுக்குக் கடன்பட்டவர் இல்லை — எல்லா வாடிக்கையாளர்களும் தீர்வு செய்யப்பட்டுள்ளனர்.</string>
+    <string name="reports_share_subject">KhataAgent அறிக்கை — %1$s</string>
+    <string name="reports_share_none">யாரும் இல்லை</string>
+    <string name="reports_share_header">KhataAgent — %1$s — %2$s</string>
+    <string name="reports_share_today_line">கடன் %1$s பணம் செலுத்தியது %2$s</string>
+    <string name="reports_share_week_line">இந்த வாரம்: கடன் %1$s பணம் செலுத்தியது %2$s (%3$d பரிவர்த்தனைகள்)</string>
+    <string name="reports_share_debtors_line">அதிகம் கடன்பட்டோர்: %1$s</string>
+
+    <string name="inventory_title">இருப்பு</string>
+    <string name="inventory_low_chip">குறைவு</string>
+    <string name="inventory_empty_state">இன்னும் பொருட்கள் இல்லை — விற்பனையைப் பதிவு செய்யும்போது இருப்பு புதுப்பிக்கப்படும்.</string>
+    <string name="inventory_cd_decrease">%1$s குறை</string>
+    <string name="inventory_cd_increase">%1$s கூட்டு</string>
+
+    <string name="settings_title">அமைப்புகள்</string>
+    <string name="settings_shop_details">கடை விவரங்கள்</string>
+    <string name="settings_shop_name_label">கடை / வணிகப் பெயர்</string>
+    <string name="settings_daily_limit_label">தினசரி ஒற்றை-பரிவர்த்தனை வரம்பு (₹)</string>
+    <string name="settings_daily_limit_hint">இந்தத் தொகையை விட அதிகமான எந்தவொரு கடன் அல்லது பணம் செலுத்துதலுக்கும் ஏஜென்ட் உங்களிடம் உறுதிப்படுத்தல் கேட்கும்.</string>
+    <string name="settings_save">சேமி</string>
+    <string name="settings_saved">சேமிக்கப்பட்டது</string>
+    <string name="settings_language_title">மொழி</string>
+    <string name="settings_language_subtitle">ஏஜென்ட் கேட்கும் மற்றும் பேசும் மொழியை மாற்றவும்.</string>
+    <string name="settings_change_language">மொழியை மாற்று</string>
+
+    <string name="customers_title">வாடிக்கையாளர்கள்</string>
+    <string name="customers_empty_state">இன்னும் வாடிக்கையாளர்கள் இல்லை — நீங்கள் கடன் அல்லது விற்பனையைப் பதிவு செய்தவுடன் அவர்கள் இங்கே தோன்றுவார்கள்.</string>
+    <string name="customer_owes">கடன்பட்டுள்ளார்</string>
+    <string name="customer_settled">தீர்வானது</string>
+
+    <string name="customer_detail_cd_back">வாடிக்கையாளர்களுக்குத் திரும்பு</string>
+    <string name="customer_detail_default_name">வாடிக்கையாளர்</string>
+    <string name="customer_detail_empty_txns">இந்த வாடிக்கையாளருக்கு இன்னும் பரிவர்த்தனைகள் இல்லை.</string>
+    <string name="customer_detail_send_reminder">நினைவூட்டல் அனுப்பு</string>
+    <string name="customer_detail_balance_label">நிலுவைத் தொகை</string>
+    <string name="customer_detail_owes_you">%1$s உங்களுக்குக் கடன்பட்டுள்ளார்</string>
+    <string name="customer_detail_default_customer">இந்த வாடிக்கையாளர்</string>
+    <string name="customer_detail_fully_settled">முழுவதும் தீர்வானது</string>
+    <string name="customer_reminder_message">வணக்கம் %1$s அவர்களே, எங்களிடம் உங்கள் %2$s நிலுவையில் உள்ளது. நன்றி.</string>
+
+    <string name="add_customer_title">வாடிக்கையாளரைச் சேர்</string>
+    <string name="add_customer_name_label">வாடிக்கையாளர் பெயர்</string>
+    <string name="add_customer_name_placeholder">எ.கா. ரமேஷ் குமார்</string>
+    <string name="add_customer_phone_label">தொலைபேசி எண் (விருப்பத்தேர்வு)</string>
+    <string name="add_customer_phone_placeholder">10-இலக்க மொபைல் எண்</string>
+    <string name="add_customer_opening_balance_label">தொடக்க நிலுவை (விருப்பத்தேர்வு)</string>
+    <string name="add_customer_opening_balance_placeholder">₹0 — ஏற்கனவே ஏதேனும் நிலுவை இருந்தால்</string>
+    <string name="add_customer_save">வாடிக்கையாளரைச் சேமி</string>
+    <string name="add_customer_error_name_required">வாடிக்கையாளரின் பெயரை உள்ளிடவும்.</string>
+    <string name="add_customer_error_phone_length">தொலைபேசி எண் 10 இலக்கங்களாக இருக்க வேண்டும் — அல்லது காலியாக விடவும்.</string>
+    <string name="add_customer_error_balance_invalid">தொடக்க நிலுவை சரியான தொகையாக இருக்க வேண்டும்.</string>
+
+    <string name="edit_txn_header">பதிவைத் திருத்து</string>
+    <string name="edit_txn_amount_label">தொகை</string>
+    <string name="edit_txn_item_label">பொருள் (விருப்பத்தேர்வு)</string>
+    <string name="edit_txn_item_placeholder">எ.கா. அரிசி, சர்க்கரை</string>
+    <string name="edit_txn_note_label">குறிப்பு (விருப்பத்தேர்வு)</string>
+    <string name="edit_txn_note_placeholder">கூடுதல் விவரம்</string>
+    <string name="edit_txn_delete">நீக்கு</string>
+    <string name="edit_txn_save_changes">மாற்றங்களைச் சேமி</string>
+    <string name="edit_txn_error_invalid_amount">சரியான தொகையை உள்ளிடவும்.</string>
+    <string name="edit_txn_delete_confirm_title">இந்தப் பதிவை நீக்கவா?</string>
+    <string name="edit_txn_delete_confirm_body">இதை மீட்க முடியாது. இந்த பரிவர்த்தனை கணக்கிலிருந்து அகற்றப்படும்.</string>
+    <string name="edit_txn_confirm_delete">ஆம், நீக்கு</string>
 </resources>

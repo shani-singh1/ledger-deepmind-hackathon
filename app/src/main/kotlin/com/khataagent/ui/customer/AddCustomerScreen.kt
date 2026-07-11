@@ -28,10 +28,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.khataagent.R
 import com.khataagent.core.data.LedgerRepository
 import com.khataagent.fake.FakeLedgerRepository
 import com.khataagent.ui.SimpleViewModelFactory
@@ -56,12 +58,19 @@ fun AddCustomerScreen(
     val name by viewModel.name.collectAsState()
     val phone by viewModel.phone.collectAsState()
     val openingBalance by viewModel.openingBalance.collectAsState()
-    val error by viewModel.error.collectAsState()
+    val errorCode by viewModel.error.collectAsState()
     val saving by viewModel.saving.collectAsState()
     val savedCustomerId by viewModel.savedCustomerId.collectAsState()
 
     LaunchedEffect(savedCustomerId) {
         savedCustomerId?.let { onSaved(it) }
+    }
+
+    val error = when (errorCode) {
+        AddCustomerError.NAME_REQUIRED -> stringResource(R.string.add_customer_error_name_required)
+        AddCustomerError.PHONE_LENGTH -> stringResource(R.string.add_customer_error_phone_length)
+        AddCustomerError.BALANCE_INVALID -> stringResource(R.string.add_customer_error_balance_invalid)
+        null -> null
     }
 
     AddCustomerContent(
@@ -110,11 +119,11 @@ private fun AddCustomerContent(
             IconButton(onClick = onCancel) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Cancel",
+                    contentDescription = stringResource(R.string.action_cancel),
                 )
             }
             Text(
-                text = "Add Customer",
+                text = stringResource(R.string.add_customer_title),
                 style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.onBackground,
             )
@@ -123,7 +132,7 @@ private fun AddCustomerContent(
         Spacer(modifier = Modifier.height(12.dp))
 
         Text(
-            text = "CUSTOMER NAME",
+            text = stringResource(R.string.add_customer_name_label),
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
@@ -134,7 +143,7 @@ private fun AddCustomerContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(60.dp),
-            placeholder = { Text("e.g. Ramesh Kumar") },
+            placeholder = { Text(stringResource(R.string.add_customer_name_placeholder)) },
             singleLine = true,
             shape = RoundedCornerShape(14.dp),
             textStyle = MaterialTheme.typography.bodyLarge,
@@ -143,7 +152,7 @@ private fun AddCustomerContent(
         Spacer(modifier = Modifier.height(20.dp))
 
         Text(
-            text = "PHONE NUMBER (OPTIONAL)",
+            text = stringResource(R.string.add_customer_phone_label),
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
@@ -154,7 +163,7 @@ private fun AddCustomerContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(60.dp),
-            placeholder = { Text("10-digit mobile number") },
+            placeholder = { Text(stringResource(R.string.add_customer_phone_placeholder)) },
             singleLine = true,
             shape = RoundedCornerShape(14.dp),
             textStyle = MaterialTheme.typography.bodyLarge,
@@ -164,7 +173,7 @@ private fun AddCustomerContent(
         Spacer(modifier = Modifier.height(20.dp))
 
         Text(
-            text = "OPENING BALANCE (OPTIONAL)",
+            text = stringResource(R.string.add_customer_opening_balance_label),
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
@@ -175,7 +184,7 @@ private fun AddCustomerContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(60.dp),
-            placeholder = { Text("₹0 — amount already owed, if any") },
+            placeholder = { Text(stringResource(R.string.add_customer_opening_balance_placeholder)) },
             singleLine = true,
             shape = RoundedCornerShape(14.dp),
             textStyle = MaterialTheme.typography.bodyLarge,
@@ -212,7 +221,7 @@ private fun AddCustomerContent(
                 )
             } else {
                 Text(
-                    text = "Save Customer",
+                    text = stringResource(R.string.add_customer_save),
                     style = MaterialTheme.typography.titleMedium,
                 )
             }

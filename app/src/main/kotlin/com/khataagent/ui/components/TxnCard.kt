@@ -20,8 +20,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.khataagent.R
 import com.khataagent.core.model.Transaction
 import com.khataagent.core.model.TxnSource
 import com.khataagent.core.model.TxnType
@@ -42,10 +44,11 @@ fun txnTypeColor(type: TxnType): Color {
     }
 }
 
+@Composable
 private fun txnTypeLabel(type: TxnType): String = when (type) {
-    TxnType.CREDIT -> "Credit"
-    TxnType.PAYMENT -> "Payment"
-    TxnType.SALE -> "Sale"
+    TxnType.CREDIT -> stringResource(R.string.txn_type_credit)
+    TxnType.PAYMENT -> stringResource(R.string.txn_type_payment)
+    TxnType.SALE -> stringResource(R.string.txn_type_sale)
 }
 
 private fun txnSign(type: TxnType): String = when (type) {
@@ -87,7 +90,7 @@ fun TxnCard(txn: Transaction, modifier: Modifier = Modifier, onClick: (() -> Uni
             Column(modifier = Modifier.weight(1f)) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
-                        text = txn.customerName ?: "Walk-in",
+                        text = txn.customerName ?: stringResource(R.string.txn_walk_in),
                         style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.onSurface,
                     )

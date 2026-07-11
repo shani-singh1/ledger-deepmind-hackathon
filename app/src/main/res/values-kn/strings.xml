@@ -1,7 +1,14 @@
 <resources>
+    <string name="app_name">KhataAgent</string>
     <string name="nav_today">ಇಂದು</string>
     <string name="nav_log">ಏಜೆಂಟ್ ಲಾಗ್</string>
     <string name="nav_insights">ಒಳನೋಟಗಳು</string>
+    <string name="nav_customers">ಗ್ರಾಹಕರು</string>
+    <string name="nav_reports">ವರದಿಗಳು</string>
+    <string name="nav_inventory">ಇನ್ವೆಂಟರಿ</string>
+    <string name="nav_settings">ಸೆಟ್ಟಿಂಗ್‌ಗಳು</string>
+    <string name="add_customer">ಗ್ರಾಹಕರನ್ನು ಸೇರಿಸಿ</string>
+    <string name="menu_more">ಇನ್ನಷ್ಟು</string>
     <string name="cd_simulate_offline">ಆಫ್‌ಲೈನ್ ಆಗಿರುವಂತೆ ಅನುಕರಿಸಿ</string>
     <string name="cd_simulate_online">ಆನ್‌ಲೈನ್ ಆಗಿರುವಂತೆ ಅನುಕರಿಸಿ</string>
 
@@ -54,4 +61,93 @@
 
     <string name="onboarding_title">ನಿಮ್ಮ ಭಾಷೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ</string>
     <string name="onboarding_subtitle">ನಿಮಗೆ ಇಷ್ಟವಾದ ಭಾಷೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ</string>
+
+    <string name="action_cancel">ರದ್ದುಮಾಡಿ</string>
+
+    <string name="txn_type_credit">ಸಾಲ</string>
+    <string name="txn_type_payment">ಪಾವತಿ</string>
+    <string name="txn_type_sale">ಮಾರಾಟ</string>
+    <string name="txn_walk_in">ವಾಕ್-ಇನ್</string>
+
+    <string name="unit_kg">ಕಿಲೋ</string>
+    <string name="unit_g">ಗ್ರಾಂ</string>
+    <string name="unit_l">ಲೀಟರ್</string>
+    <string name="unit_ml">ಮಿಲಿ</string>
+    <string name="unit_pcs">ಪೀಸ್</string>
+    <string name="unit_dozen">ಡಜನ್</string>
+
+    <string name="reports_title">ವರದಿಗಳು</string>
+    <string name="reports_period_today">ಇಂದು</string>
+    <string name="reports_period_week">ಈ ವಾರ</string>
+    <string name="reports_credit">ಸಾಲ</string>
+    <string name="reports_payments">ಪಾವತಿಗಳು</string>
+    <string name="reports_net">ನಿವ್ವಳ</string>
+    <string name="reports_txn_count_one">%1$d ವಹಿವಾಟು</string>
+    <string name="reports_txn_count_other">%1$d ವಹಿವಾಟುಗಳು</string>
+    <string name="reports_share_button">ವರದಿ ಹಂಚಿಕೊಳ್ಳಿ</string>
+    <string name="reports_top_debtors">ಅತಿ ಹೆಚ್ಚು ಸಾಲಗಾರರು</string>
+    <string name="reports_no_debtors">ಈಗ ಯಾರೂ ನಿಮಗೆ ಬಾಕಿ ಇಟ್ಟಿಲ್ಲ — ಎಲ್ಲಾ ಗ್ರಾಹಕರ ಖಾತೆ ಚುಕ್ತಾ ಆಗಿದೆ.</string>
+    <string name="reports_share_subject">KhataAgent ವರದಿ — %1$s</string>
+    <string name="reports_share_none">ಯಾರೂ ಇಲ್ಲ</string>
+    <string name="reports_share_header">KhataAgent — %1$s — %2$s</string>
+    <string name="reports_share_today_line">ಸಾಲ %1$s ಪಾವತಿಗಳು %2$s</string>
+    <string name="reports_share_week_line">ಈ ವಾರ: ಸಾಲ %1$s ಪಾವತಿಗಳು %2$s (%3$d ವಹಿವಾಟುಗಳು)</string>
+    <string name="reports_share_debtors_line">ಅತಿ ಹೆಚ್ಚು ಸಾಲಗಾರರು: %1$s</string>
+
+    <string name="inventory_title">ಇನ್ವೆಂಟರಿ</string>
+    <string name="inventory_low_chip">ಕಡಿಮೆ</string>
+    <string name="inventory_empty_state">ಇನ್ನೂ ಯಾವುದೇ ಸರಕು ಇಲ್ಲ — ಮಾರಾಟ ದಾಖಲಿಸಿದಾಗ ಇನ್ವೆಂಟರಿ ಅಪ್‌ಡೇಟ್ ಆಗುತ್ತದೆ.</string>
+    <string name="inventory_cd_decrease">%1$s ಕಡಿಮೆ ಮಾಡಿ</string>
+    <string name="inventory_cd_increase">%1$s ಹೆಚ್ಚಿಸಿ</string>
+
+    <string name="settings_title">ಸೆಟ್ಟಿಂಗ್‌ಗಳು</string>
+    <string name="settings_shop_details">ಅಂಗಡಿ ವಿವರಗಳು</string>
+    <string name="settings_shop_name_label">ಅಂಗಡಿ / ವ್ಯಾಪಾರದ ಹೆಸರು</string>
+    <string name="settings_daily_limit_label">ದೈನಂದಿನ ಒಂದೇ-ವಹಿವಾಟು ಮಿತಿ (₹)</string>
+    <string name="settings_daily_limit_hint">ಈ ಮೊತ್ತಕ್ಕಿಂತ ಹೆಚ್ಚಿನ ಯಾವುದೇ ಸಾಲ ಅಥವಾ ಪಾವತಿಗೆ ಏಜೆಂಟ್ ನಿಮ್ಮಿಂದ ದೃಢೀಕರಣ ಕೇಳುತ್ತದೆ.</string>
+    <string name="settings_save">ಉಳಿಸಿ</string>
+    <string name="settings_saved">ಉಳಿಸಲಾಗಿದೆ</string>
+    <string name="settings_language_title">ಭಾಷೆ</string>
+    <string name="settings_language_subtitle">ಏಜೆಂಟ್ ಕೇಳುವ ಮತ್ತು ಮಾತನಾಡುವ ಭಾಷೆಯನ್ನು ಬದಲಾಯಿಸಿ.</string>
+    <string name="settings_change_language">ಭಾಷೆ ಬದಲಾಯಿಸಿ</string>
+
+    <string name="customers_title">ಗ್ರಾಹಕರು</string>
+    <string name="customers_empty_state">ಇನ್ನೂ ಯಾವುದೇ ಗ್ರಾಹಕರಿಲ್ಲ — ನೀವು ಸಾಲ ಅಥವಾ ಮಾರಾಟವನ್ನು ದಾಖಲಿಸಿದ ತಕ್ಷಣ ಅವರು ಇಲ್ಲಿ ಕಾಣಿಸಿಕೊಳ್ಳುತ್ತಾರೆ.</string>
+    <string name="customer_owes">ಬಾಕಿ ಇದೆ</string>
+    <string name="customer_settled">ಚುಕ್ತಾ</string>
+
+    <string name="customer_detail_cd_back">ಗ್ರಾಹಕರಿಗೆ ಹಿಂತಿರುಗಿ</string>
+    <string name="customer_detail_default_name">ಗ್ರಾಹಕ</string>
+    <string name="customer_detail_empty_txns">ಈ ಗ್ರಾಹಕರಿಗೆ ಇನ್ನೂ ಯಾವುದೇ ವಹಿವಾಟುಗಳಿಲ್ಲ.</string>
+    <string name="customer_detail_send_reminder">ಜ್ಞಾಪನೆ ಕಳುಹಿಸಿ</string>
+    <string name="customer_detail_balance_label">ಬಾಕಿ ಮೊತ್ತ</string>
+    <string name="customer_detail_owes_you">%1$s ಬಳಿ ನಿಮ್ಮ ಬಾಕಿ ಇದೆ</string>
+    <string name="customer_detail_default_customer">ಈ ಗ್ರಾಹಕರ</string>
+    <string name="customer_detail_fully_settled">ಸಂಪೂರ್ಣ ಚುಕ್ತಾ</string>
+    <string name="customer_reminder_message">ನಮಸ್ತೆ %1$s ಅವರೇ, ನಮ್ಮಲ್ಲಿ ನಿಮ್ಮ %2$s ಬಾಕಿ ಇದೆ. ಧನ್ಯವಾದಗಳು.</string>
+
+    <string name="add_customer_title">ಗ್ರಾಹಕರನ್ನು ಸೇರಿಸಿ</string>
+    <string name="add_customer_name_label">ಗ್ರಾಹಕರ ಹೆಸರು</string>
+    <string name="add_customer_name_placeholder">ಉದಾ. ರಮೇಶ್ ಕುಮಾರ್</string>
+    <string name="add_customer_phone_label">ಫೋನ್ ಸಂಖ್ಯೆ (ಐಚ್ಛಿಕ)</string>
+    <string name="add_customer_phone_placeholder">10-ಅಂಕಿಯ ಮೊಬೈಲ್ ಸಂಖ್ಯೆ</string>
+    <string name="add_customer_opening_balance_label">ಆರಂಭಿಕ ಬಾಕಿ (ಐಚ್ಛಿಕ)</string>
+    <string name="add_customer_opening_balance_placeholder">₹0 — ಈಗಾಗಲೇ ಏನಾದರೂ ಬಾಕಿ ಇದ್ದರೆ</string>
+    <string name="add_customer_save">ಗ್ರಾಹಕರನ್ನು ಉಳಿಸಿ</string>
+    <string name="add_customer_error_name_required">ದಯವಿಟ್ಟು ಗ್ರಾಹಕರ ಹೆಸರನ್ನು ನಮೂದಿಸಿ.</string>
+    <string name="add_customer_error_phone_length">ಫೋನ್ ಸಂಖ್ಯೆ 10 ಅಂಕಿಗಳಿರಬೇಕು — ಅಥವಾ ಖಾಲಿ ಬಿಡಿ.</string>
+    <string name="add_customer_error_balance_invalid">ಆರಂಭಿಕ ಬಾಕಿ ಮಾನ್ಯವಾದ ಮೊತ್ತವಾಗಿರಬೇಕು.</string>
+
+    <string name="edit_txn_header">ಎಂಟ್ರಿ ಸಂಪಾದಿಸಿ</string>
+    <string name="edit_txn_amount_label">ಮೊತ್ತ</string>
+    <string name="edit_txn_item_label">ವಸ್ತು (ಐಚ್ಛಿಕ)</string>
+    <string name="edit_txn_item_placeholder">ಉದಾ. ಅಕ್ಕಿ, ಸಕ್ಕರೆ</string>
+    <string name="edit_txn_note_label">ಟಿಪ್ಪಣಿ (ಐಚ್ಛಿಕ)</string>
+    <string name="edit_txn_note_placeholder">ಯಾವುದೇ ಹೆಚ್ಚುವರಿ ವಿವರ</string>
+    <string name="edit_txn_delete">ಅಳಿಸಿ</string>
+    <string name="edit_txn_save_changes">ಬದಲಾವಣೆಗಳನ್ನು ಉಳಿಸಿ</string>
+    <string name="edit_txn_error_invalid_amount">ಮಾನ್ಯವಾದ ಮೊತ್ತವನ್ನು ನಮೂದಿಸಿ.</string>
+    <string name="edit_txn_delete_confirm_title">ಈ ಎಂಟ್ರಿಯನ್ನು ಅಳಿಸಬೇಕೇ?</string>
+    <string name="edit_txn_delete_confirm_body">ಇದನ್ನು ಹಿಂತಿರುಗಿಸಲು ಸಾಧ್ಯವಿಲ್ಲ. ಈ ವಹಿವಾಟನ್ನು ಖಾತೆಯಿಂದ ತೆಗೆದುಹಾಕಲಾಗುತ್ತದೆ.</string>
+    <string name="edit_txn_confirm_delete">ಹೌದು, ಅಳಿಸಿ</string>
 </resources>

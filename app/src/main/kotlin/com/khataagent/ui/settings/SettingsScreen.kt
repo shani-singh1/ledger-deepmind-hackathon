@@ -31,10 +31,12 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.khataagent.R
 import com.khataagent.settings.SettingsStore
 import com.khataagent.ui.theme.KhataTheme
 
@@ -97,7 +99,7 @@ private fun SettingsContent(
     ) {
         item {
             Text(
-                text = "Settings",
+                text = stringResource(R.string.settings_title),
                 style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.onBackground,
             )
@@ -111,7 +113,7 @@ private fun SettingsContent(
             ) {
                 Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
                     Text(
-                        text = "Shop details",
+                        text = stringResource(R.string.settings_shop_details),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.onSurface,
@@ -119,7 +121,7 @@ private fun SettingsContent(
                     OutlinedTextField(
                         value = shopName,
                         onValueChange = onShopNameChange,
-                        label = { Text("Shop / business name") },
+                        label = { Text(stringResource(R.string.settings_shop_name_label)) },
                         singleLine = true,
                         modifier = Modifier.fillMaxWidth(),
                     )
@@ -127,13 +129,13 @@ private fun SettingsContent(
                         OutlinedTextField(
                             value = dailyLimitText,
                             onValueChange = onDailyLimitChange,
-                            label = { Text("Daily single-transaction limit (₹)") },
+                            label = { Text(stringResource(R.string.settings_daily_limit_label)) },
                             singleLine = true,
                             keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(keyboardType = KeyboardType.Number),
                             modifier = Modifier.fillMaxWidth(),
                         )
                         Text(
-                            text = "The agent defers to you for confirmation on any single credit or payment above this amount.",
+                            text = stringResource(R.string.settings_daily_limit_hint),
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier.padding(top = 4.dp),
@@ -146,9 +148,9 @@ private fun SettingsContent(
                         if (showSaved) {
                             Icon(imageVector = Icons.Filled.Check, contentDescription = null)
                             Spacer(modifier = Modifier.width(8.dp))
-                            Text("Saved", style = MaterialTheme.typography.titleMedium)
+                            Text(stringResource(R.string.settings_saved), style = MaterialTheme.typography.titleMedium)
                         } else {
-                            Text("Save", style = MaterialTheme.typography.titleMedium)
+                            Text(stringResource(R.string.settings_save), style = MaterialTheme.typography.titleMedium)
                         }
                     }
                 }
@@ -163,13 +165,13 @@ private fun SettingsContent(
             ) {
                 Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     Text(
-                        text = "Language",
+                        text = stringResource(R.string.settings_language_title),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.onSurface,
                     )
                     Text(
-                        text = "Change the language the agent listens and speaks in.",
+                        text = stringResource(R.string.settings_language_subtitle),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
@@ -179,7 +181,7 @@ private fun SettingsContent(
                     ) {
                         Icon(imageVector = Icons.Filled.Language, contentDescription = null)
                         Spacer(modifier = Modifier.width(8.dp))
-                        Text("Change language", style = MaterialTheme.typography.titleMedium)
+                        Text(stringResource(R.string.settings_change_language), style = MaterialTheme.typography.titleMedium)
                     }
                 }
             }

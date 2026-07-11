@@ -69,4 +69,103 @@
     <!-- Onboarding -->
     <string name="onboarding_title">Choose your language</string>
     <string name="onboarding_subtitle">अपनी भाषा चुनें • ভাষা নির্বাচন করুন • మీ భాషను ఎంచుకోండి</string>
+
+    <!-- Shared / generic actions -->
+    <string name="action_cancel">Cancel</string>
+
+    <!-- Shared transaction type labels (TxnCard, Edit sheet) -->
+    <string name="txn_type_credit">Credit</string>
+    <string name="txn_type_payment">Payment</string>
+    <string name="txn_type_sale">Sale</string>
+    <string name="txn_walk_in">Walk-in</string>
+
+    <!-- Shared units (Inventory) -->
+    <string name="unit_kg">kg</string>
+    <string name="unit_g">g</string>
+    <string name="unit_l">L</string>
+    <string name="unit_ml">ml</string>
+    <string name="unit_pcs">pcs</string>
+    <string name="unit_dozen">dozen</string>
+
+    <!-- Reports -->
+    <string name="reports_title">Reports</string>
+    <string name="reports_period_today">Today</string>
+    <string name="reports_period_week">This week</string>
+    <string name="reports_credit">Credit</string>
+    <string name="reports_payments">Payments</string>
+    <string name="reports_net">Net</string>
+    <string name="reports_txn_count_one">%1$d transaction</string>
+    <string name="reports_txn_count_other">%1$d transactions</string>
+    <string name="reports_share_button">Share report</string>
+    <string name="reports_top_debtors">Top debtors</string>
+    <string name="reports_no_debtors">Nobody owes you right now — every customer is settled up.</string>
+    <string name="reports_share_subject">KhataAgent report — %1$s</string>
+    <string name="reports_share_none">none</string>
+    <string name="reports_share_header">KhataAgent — %1$s — %2$s</string>
+    <string name="reports_share_today_line">Credit %1$s Payments %2$s</string>
+    <string name="reports_share_week_line">This week: Credit %1$s Payments %2$s (%3$d txns)</string>
+    <string name="reports_share_debtors_line">Top debtors: %1$s</string>
+
+    <!-- Inventory -->
+    <string name="inventory_title">Inventory</string>
+    <string name="inventory_low_chip">Low</string>
+    <string name="inventory_empty_state">No items yet — inventory updates as you log sales.</string>
+    <string name="inventory_cd_decrease">Decrease %1$s</string>
+    <string name="inventory_cd_increase">Increase %1$s</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_shop_details">Shop details</string>
+    <string name="settings_shop_name_label">Shop / business name</string>
+    <string name="settings_daily_limit_label">Daily single-transaction limit (₹)</string>
+    <string name="settings_daily_limit_hint">The agent defers to you for confirmation on any single credit or payment above this amount.</string>
+    <string name="settings_save">Save</string>
+    <string name="settings_saved">Saved</string>
+    <string name="settings_language_title">Language</string>
+    <string name="settings_language_subtitle">Change the language the agent listens and speaks in.</string>
+    <string name="settings_change_language">Change language</string>
+
+    <!-- Customer list -->
+    <string name="customers_title">Customers</string>
+    <string name="customers_empty_state">No customers yet — they\'ll show up here once you log a credit or sale.</string>
+    <string name="customer_owes">owes</string>
+    <string name="customer_settled">settled</string>
+
+    <!-- Customer detail -->
+    <string name="customer_detail_cd_back">Back to customers</string>
+    <string name="customer_detail_default_name">Customer</string>
+    <string name="customer_detail_empty_txns">No transactions yet for this customer.</string>
+    <string name="customer_detail_send_reminder">Send Reminder</string>
+    <string name="customer_detail_balance_label">OUTSTANDING BALANCE</string>
+    <string name="customer_detail_owes_you">%1$s owes you</string>
+    <string name="customer_detail_default_customer">This customer</string>
+    <string name="customer_detail_fully_settled">Fully settled</string>
+    <string name="customer_reminder_message">Namaste %1$s ji, aapka hamare yahan %2$s baaki hai. Dhanyavaad.</string>
+
+    <!-- Add customer -->
+    <string name="add_customer_title">Add Customer</string>
+    <string name="add_customer_name_label">CUSTOMER NAME</string>
+    <string name="add_customer_name_placeholder">e.g. Ramesh Kumar</string>
+    <string name="add_customer_phone_label">PHONE NUMBER (OPTIONAL)</string>
+    <string name="add_customer_phone_placeholder">10-digit mobile number</string>
+    <string name="add_customer_opening_balance_label">OPENING BALANCE (OPTIONAL)</string>
+    <string name="add_customer_opening_balance_placeholder">₹0 — amount already owed, if any</string>
+    <string name="add_customer_save">Save Customer</string>
+    <string name="add_customer_error_name_required">Please enter the customer\'s name.</string>
+    <string name="add_customer_error_phone_length">Phone number should be 10 digits — or leave it blank.</string>
+    <string name="add_customer_error_balance_invalid">Opening balance should be a valid amount.</string>
+
+    <!-- Edit transaction sheet -->
+    <string name="edit_txn_header">Edit Entry</string>
+    <string name="edit_txn_amount_label">AMOUNT</string>
+    <string name="edit_txn_item_label">ITEM (OPTIONAL)</string>
+    <string name="edit_txn_item_placeholder">e.g. rice, sugar</string>
+    <string name="edit_txn_note_label">NOTE (OPTIONAL)</string>
+    <string name="edit_txn_note_placeholder">Any extra detail</string>
+    <string name="edit_txn_delete">Delete</string>
+    <string name="edit_txn_save_changes">Save Changes</string>
+    <string name="edit_txn_error_invalid_amount">Enter a valid amount.</string>
+    <string name="edit_txn_delete_confirm_title">Delete this entry?</string>
+    <string name="edit_txn_delete_confirm_body">This cannot be undone. The transaction will be removed from the khata.</string>
+    <string name="edit_txn_confirm_delete">Yes, Delete</string>
 </resources>

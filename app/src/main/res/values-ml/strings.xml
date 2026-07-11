@@ -1,7 +1,14 @@
 <resources>
+    <string name="app_name">KhataAgent</string>
     <string name="nav_today">ഇന്ന്</string>
     <string name="nav_log">ഏജന്റ് ലോഗ്</string>
     <string name="nav_insights">ഇൻസൈറ്റുകൾ</string>
+    <string name="nav_customers">ഉപഭോക്താക്കൾ</string>
+    <string name="nav_reports">റിപ്പോർട്ടുകൾ</string>
+    <string name="nav_inventory">ഇൻവെന്ററി</string>
+    <string name="nav_settings">ക്രമീകരണങ്ങൾ</string>
+    <string name="add_customer">ഉപഭോക്താവിനെ ചേർക്കുക</string>
+    <string name="menu_more">കൂടുതൽ</string>
     <string name="cd_simulate_offline">ഓഫ്‌ലൈൻ ആണെന്ന് അനുകരിക്കുക</string>
     <string name="cd_simulate_online">ഓൺലൈൻ ആണെന്ന് അനുകരിക്കുക</string>
 
@@ -54,4 +61,93 @@
 
     <string name="onboarding_title">നിങ്ങളുടെ ഭാഷ തിരഞ്ഞെടുക്കുക</string>
     <string name="onboarding_subtitle">നിങ്ങൾക്ക് ഇഷ്ടമുള്ള ഭാഷ തിരഞ്ഞെടുക്കുക</string>
+
+    <string name="action_cancel">റദ്ദാക്കുക</string>
+
+    <string name="txn_type_credit">കടം</string>
+    <string name="txn_type_payment">പേയ്‌മെന്റ്</string>
+    <string name="txn_type_sale">വിൽപ്പന</string>
+    <string name="txn_walk_in">വാക്-ഇൻ</string>
+
+    <string name="unit_kg">കിലോ</string>
+    <string name="unit_g">ഗ്രാം</string>
+    <string name="unit_l">ലിറ്റർ</string>
+    <string name="unit_ml">മില്ലി</string>
+    <string name="unit_pcs">പീസ്</string>
+    <string name="unit_dozen">ഡസൻ</string>
+
+    <string name="reports_title">റിപ്പോർട്ടുകൾ</string>
+    <string name="reports_period_today">ഇന്ന്</string>
+    <string name="reports_period_week">ഈ ആഴ്ച</string>
+    <string name="reports_credit">കടം</string>
+    <string name="reports_payments">പേയ്‌മെന്റുകൾ</string>
+    <string name="reports_net">അറ്റം</string>
+    <string name="reports_txn_count_one">%1$d ഇടപാട്</string>
+    <string name="reports_txn_count_other">%1$d ഇടപാടുകൾ</string>
+    <string name="reports_share_button">റിപ്പോർട്ട് പങ്കിടുക</string>
+    <string name="reports_top_debtors">ഏറ്റവും കൂടുതൽ കടക്കാർ</string>
+    <string name="reports_no_debtors">ഇപ്പോൾ ആരും നിങ്ങൾക്ക് കടപ്പെട്ടിട്ടില്ല — എല്ലാ ഉപഭോക്താക്കളുടെയും കണക്ക് തീർന്നിരിക്കുന്നു.</string>
+    <string name="reports_share_subject">KhataAgent റിപ്പോർട്ട് — %1$s</string>
+    <string name="reports_share_none">ആരുമില്ല</string>
+    <string name="reports_share_header">KhataAgent — %1$s — %2$s</string>
+    <string name="reports_share_today_line">കടം %1$s പേയ്‌മെന്റുകൾ %2$s</string>
+    <string name="reports_share_week_line">ഈ ആഴ്ച: കടം %1$s പേയ്‌മെന്റുകൾ %2$s (%3$d ഇടപാടുകൾ)</string>
+    <string name="reports_share_debtors_line">ഏറ്റവും കൂടുതൽ കടക്കാർ: %1$s</string>
+
+    <string name="inventory_title">ഇൻവെന്ററി</string>
+    <string name="inventory_low_chip">കുറവ്</string>
+    <string name="inventory_empty_state">ഇതുവരെ സാധനങ്ങളൊന്നുമില്ല — വിൽപ്പന രേഖപ്പെടുത്തുമ്പോൾ ഇൻവെന്ററി പുതുക്കും.</string>
+    <string name="inventory_cd_decrease">%1$s കുറയ്ക്കുക</string>
+    <string name="inventory_cd_increase">%1$s കൂട്ടുക</string>
+
+    <string name="settings_title">ക്രമീകരണങ്ങൾ</string>
+    <string name="settings_shop_details">കടയുടെ വിവരങ്ങൾ</string>
+    <string name="settings_shop_name_label">കട / ബിസിനസ്സ് പേര്</string>
+    <string name="settings_daily_limit_label">ദിവസേനയുള്ള ഒറ്റ-ഇടപാട് പരിധി (₹)</string>
+    <string name="settings_daily_limit_hint">ഈ തുകയിൽ കൂടുതലുള്ള ഏതൊരു കടമോ പേയ്‌മെന്റോ ആയാൽ ഏജന്റ് നിങ്ങളോട് സ്ഥിരീകരണം ചോദിക്കും.</string>
+    <string name="settings_save">സേവ് ചെയ്യുക</string>
+    <string name="settings_saved">സേവ് ചെയ്തു</string>
+    <string name="settings_language_title">ഭാഷ</string>
+    <string name="settings_language_subtitle">ഏജന്റ് കേൾക്കുകയും സംസാരിക്കുകയും ചെയ്യുന്ന ഭാഷ മാറ്റുക.</string>
+    <string name="settings_change_language">ഭാഷ മാറ്റുക</string>
+
+    <string name="customers_title">ഉപഭോക്താക്കൾ</string>
+    <string name="customers_empty_state">ഇതുവരെ ഉപഭോക്താക്കൾ ഇല്ല — കടമോ വിൽപ്പനയോ രേഖപ്പെടുത്തിയാൽ ഉടൻ അവർ ഇവിടെ കാണും.</string>
+    <string name="customer_owes">കടപ്പെട്ടിരിക്കുന്നു</string>
+    <string name="customer_settled">തീർന്നു</string>
+
+    <string name="customer_detail_cd_back">ഉപഭോക്താക്കളിലേക്ക് മടങ്ങുക</string>
+    <string name="customer_detail_default_name">ഉപഭോക്താവ്</string>
+    <string name="customer_detail_empty_txns">ഈ ഉപഭോക്താവിന് ഇതുവരെ ഇടപാടുകളൊന്നുമില്ല.</string>
+    <string name="customer_detail_send_reminder">ഓർമ്മപ്പെടുത്തൽ അയയ്ക്കുക</string>
+    <string name="customer_detail_balance_label">കുടിശ്ശിക തുക</string>
+    <string name="customer_detail_owes_you">%1$s-ൽ നിന്ന് നിങ്ങൾക്ക് കിട്ടാനുണ്ട്</string>
+    <string name="customer_detail_default_customer">ഈ ഉപഭോക്താവിൽ നിന്ന്</string>
+    <string name="customer_detail_fully_settled">പൂർണ്ണമായി തീർന്നു</string>
+    <string name="customer_reminder_message">നമസ്തേ %1$s ജി, ഞങ്ങളുടെ അടുക്കൽ നിങ്ങളുടെ %2$s ബാക്കിയുണ്ട്. നന്ദി.</string>
+
+    <string name="add_customer_title">ഉപഭോക്താവിനെ ചേർക്കുക</string>
+    <string name="add_customer_name_label">ഉപഭോക്താവിന്റെ പേര്</string>
+    <string name="add_customer_name_placeholder">ഉദാ. രമേഷ് കുമാർ</string>
+    <string name="add_customer_phone_label">ഫോൺ നമ്പർ (ഐച്ഛികം)</string>
+    <string name="add_customer_phone_placeholder">10-അക്ക മൊബൈൽ നമ്പർ</string>
+    <string name="add_customer_opening_balance_label">തുടക്ക ബാക്കി (ഐച്ഛികം)</string>
+    <string name="add_customer_opening_balance_placeholder">₹0 — നേരത്തെ എന്തെങ്കിലും ബാക്കിയുണ്ടെങ്കിൽ</string>
+    <string name="add_customer_save">ഉപഭോക്താവിനെ സേവ് ചെയ്യുക</string>
+    <string name="add_customer_error_name_required">ദയവായി ഉപഭോക്താവിന്റെ പേര് നൽകുക.</string>
+    <string name="add_customer_error_phone_length">ഫോൺ നമ്പർ 10 അക്കങ്ങൾ ആയിരിക്കണം — അല്ലെങ്കിൽ ശൂന്യമായി വിടുക.</string>
+    <string name="add_customer_error_balance_invalid">തുടക്ക ബാക്കി സാധുവായ തുകയായിരിക്കണം.</string>
+
+    <string name="edit_txn_header">എൻട്രി തിരുത്തുക</string>
+    <string name="edit_txn_amount_label">തുക</string>
+    <string name="edit_txn_item_label">ഇനം (ഐച്ഛികം)</string>
+    <string name="edit_txn_item_placeholder">ഉദാ. അരി, പഞ്ചസാര</string>
+    <string name="edit_txn_note_label">കുറിപ്പ് (ഐച്ഛികം)</string>
+    <string name="edit_txn_note_placeholder">എന്തെങ്കിലും അധിക വിവരം</string>
+    <string name="edit_txn_delete">ഇല്ലാതാക്കുക</string>
+    <string name="edit_txn_save_changes">മാറ്റങ്ങൾ സേവ് ചെയ്യുക</string>
+    <string name="edit_txn_error_invalid_amount">സാധുവായ തുക നൽകുക.</string>
+    <string name="edit_txn_delete_confirm_title">ഈ എൻട്രി ഇല്ലാതാക്കണോ?</string>
+    <string name="edit_txn_delete_confirm_body">ഇത് തിരികെ കൊണ്ടുവരാൻ കഴിയില്ല. ഈ ഇടപാട് കണക്കിൽ നിന്ന് നീക്കം ചെയ്യും.</string>
+    <string name="edit_txn_confirm_delete">അതെ, ഇല്ലാതാക്കുക</string>
 </resources>

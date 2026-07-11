@@ -39,9 +39,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.khataagent.R
 import com.khataagent.core.data.LedgerRepository
 import com.khataagent.core.model.Customer
 import com.khataagent.core.model.Transaction
@@ -75,6 +77,7 @@ fun CustomerDetailScreen(
     val balance by viewModel.balance.collectAsState()
     val transactions by viewModel.transactions.collectAsState()
     val context = LocalContext.current
+    val reminderMessageTemplate = stringResource(R.string.customer_reminder_message)
 
     var editingTxn by remember { mutableStateOf<Transaction?>(null) }
 
@@ -83,7 +86,7 @@ fun CustomerDetailScreen(
         balance = balance,
         transactions = transactions,
         onBack = onBack,
-        onSendReminder = { c, b -> sendBalanceReminder(context, c, b) },
+        onSendReminder = { c, b -> sendBalanceReminder(context, c, b, reminderMessageTemplate) },
         onTxnClick = { txn -> editingTxn = txn },
         modifier = modifier,
     )
@@ -117,11 +120,11 @@ private fun CustomerDetailContent(
             IconButton(onClick = onBack) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Back to customers",
+                    contentDescription = stringResource(R.string.customer_detail_cd_back),
                 )
             }
             Text(
-                text = customer?.name?.capitalizeWords() ?: "Customer",
+                text = customer?.name?.capitalizeWords() ?: stringResource(R.string.customer_detail_default_name),
                 style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.onBackground,
             )
@@ -142,7 +145,7 @@ private fun CustomerDetailContent(
         if (transactions.isEmpty()) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 Text(
-                    text = "No transactions yet for this customer.",
+                    text = stringResource(R.string.customer_detail_empty_txns),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -177,7 +180,7 @@ private fun SendReminderButton(onClick: () -> Unit, modifier: Modifier = Modifie
         Icon(imageVector = Icons.AutoMirrored.Filled.Chat, contentDescription = null, modifier = Modifier.height(20.dp))
         Spacer(modifier = Modifier.width(8.dp))
         Text(
-            text = "Send Reminder",
+            text = stringResource(R.string.customer_detail_send_reminder),
             style = MaterialTheme.typography.titleMedium,
         )
     }
@@ -188,10 +191,10 @@ private fun SendReminderButton(onClick: () -> Unit, modifier: Modifier = Modifie
  * in WhatsApp via wa.me. Falls back to a plain SMS composer if WhatsApp isn't installed —
  * either way the shopkeeper never has to type the message by hand.
  */
-private fun sendBalanceReminder(context: Context, customer: Customer, balance: Double) {
+private fun sendBalanceReminder(context: Context, customer: Customer, balance: Double, messageTemplate: String) {
     val name = customer.name.capitalizeWords()
     val amount = formatRupees(balance)
-    val message = "Namaste $name ji, aapka hamare yahan $amount baaki hai. Dhanyavaad."
+    val message = messageTemplate.format(name, amount)
     val phone = customer.phoneHint?.filter { it.isDigit() }
     val encodedMessage = Uri.encode(message)
 
@@ -237,7 +240,7 @@ private fun BalanceHeader(customer: Customer?, balance: Double) {
             horizontalAlignment = Alignment.Start,
         ) {
             Text(
-                text = "OUTSTANDING BALANCE",
+                text = stringResource(R.string.customer_detail_balance_label),
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
@@ -248,8 +251,13 @@ private fun BalanceHeader(customer: Customer?, balance: Double) {
                 style = MoneyType.displayAmount,
             )
             Spacer(modifier = Modifier.height(4.dp))
+            val displayName = customer?.name?.capitalizeWords() ?: stringResource(R.string.customer_detail_default_customer)
             Text(
-                text = if (owesMoney) "${customer?.name?.capitalizeWords() ?: "This customer"} owes you" else "Fully settled",
+                text = if (owesMoney) {
+                    stringResource(R.string.customer_detail_owes_you, displayName)
+                } else {
+                    stringResource(R.string.customer_detail_fully_settled)
+                },
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )

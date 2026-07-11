@@ -32,10 +32,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.khataagent.R
 import com.khataagent.core.data.LedgerRepository
 import com.khataagent.fake.FakeLedgerRepository
 import com.khataagent.settings.SettingsStore
@@ -64,14 +66,35 @@ fun ReportsScreen(repository: LedgerRepository, modifier: Modifier = Modifier) {
     val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
     val shopName = remember(context) { SettingsStore(context).getShopName() }
+    val shareStrings = ShareStrings(
+        none = stringResource(R.string.reports_share_none),
+        subject = stringResource(R.string.reports_share_subject, shopName),
+        header = stringResource(R.string.reports_share_header, shopName, reportDateFormat.format(Date())),
+        todayLineTemplate = R.string.reports_share_today_line,
+        weekLineTemplate = R.string.reports_share_week_line,
+        debtorsLineTemplate = R.string.reports_share_debtors_line,
+        chooserTitle = stringResource(R.string.reports_share_button),
+    )
+    val resources = context.resources
 
     ReportsContent(
         uiState = uiState,
         shopName = shopName,
-        onShare = { shareReport(context, shopName, uiState) },
+        onShare = { shareReport(context, uiState, shareStrings, resources) },
         modifier = modifier,
     )
 }
+
+/** Pre-resolved (Composable-context) strings needed by the non-Composable [shareReport] builder. */
+private data class ShareStrings(
+    val none: String,
+    val subject: String,
+    val header: String,
+    val todayLineTemplate: Int,
+    val weekLineTemplate: Int,
+    val debtorsLineTemplate: Int,
+    val chooserTitle: String,
+)
 
 @Composable
 private fun ReportsContent(
@@ -95,7 +118,7 @@ private fun ReportsContent(
         item {
             Column {
                 Text(
-                    text = "Reports",
+                    text = stringResource(R.string.reports_title),
                     style = MaterialTheme.typography.headlineSmall,
                     color = MaterialTheme.colorScheme.onBackground,
                 )
@@ -108,7 +131,7 @@ private fun ReportsContent(
         }
         item {
             SummaryCard(
-                title = "Today",
+                title = stringResource(R.string.reports_period_today),
                 credit = uiState.today.totalCredit,
                 payments = uiState.today.totalPayments,
                 net = uiState.todayNet,
@@ -117,7 +140,7 @@ private fun ReportsContent(
         }
         item {
             SummaryCard(
-                title = "This week",
+                title = stringResource(R.string.reports_period_week),
                 credit = uiState.weekCredit,
                 payments = uiState.weekPayments,
                 net = uiState.weekNet,
@@ -131,12 +154,12 @@ private fun ReportsContent(
             ) {
                 Icon(imageVector = Icons.Filled.Share, contentDescription = null)
                 Spacer(modifier = Modifier.width(8.dp))
-                Text("Share report", style = MaterialTheme.typography.titleMedium)
+                Text(stringResource(R.string.reports_share_button), style = MaterialTheme.typography.titleMedium)
             }
         }
         item {
             Text(
-                text = "Top debtors",
+                text = stringResource(R.string.reports_top_debtors),
                 style = MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier.padding(top = 4.dp),
@@ -145,7 +168,7 @@ private fun ReportsContent(
         if (uiState.topDebtors.isEmpty()) {
             item {
                 Text(
-                    text = "Nobody owes you right now — every customer is settled up.",
+                    text = stringResource(R.string.reports_no_debtors),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -176,15 +199,15 @@ private fun SummaryCard(title: String, credit: Double, payments: Double, net: Do
             Spacer(modifier = Modifier.height(10.dp))
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                 Column {
-                    Text("Credit", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(stringResource(R.string.reports_credit), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     AmountText(amount = credit, color = extras.credit, style = MoneyType.largeAmount)
                 }
                 Column {
-                    Text("Payments", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(stringResource(R.string.reports_payments), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     AmountText(amount = payments, color = extras.payment, style = MoneyType.largeAmount)
                 }
                 Column {
-                    Text("Net", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(stringResource(R.string.reports_net), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     AmountText(
                         amount = net,
                         color = if (net >= 0) extras.credit else extras.payment,
@@ -194,7 +217,10 @@ private fun SummaryCard(title: String, credit: Double, payments: Double, net: Do
             }
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = "$txnCount transaction${if (txnCount == 1) "" else "s"}",
+                text = stringResource(
+                    if (txnCount == 1) R.string.reports_txn_count_one else R.string.reports_txn_count_other,
+                    txnCount,
+                ),
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
@@ -228,25 +254,42 @@ private fun DebtorRow(debtor: TopDebtor) {
 }
 
 /** Builds a plain-text summary and fires an [Intent.ACTION_SEND] share sheet (WhatsApp/notes/SMS). */
-private fun shareReport(context: Context, shopName: String, uiState: ReportsUiState) {
-    val dateLabel = reportDateFormat.format(Date())
+private fun shareReport(
+    context: Context,
+    uiState: ReportsUiState,
+    strings: ShareStrings,
+    resources: android.content.res.Resources,
+) {
     val debtorsLine = if (uiState.topDebtors.isEmpty()) {
-        "none"
+        strings.none
     } else {
         uiState.topDebtors.joinToString(", ") { "${it.name.capitalizeWords()} ${formatRupees(it.balance)}" }
     }
     val text = buildString {
-        append("KhataAgent — $shopName — $dateLabel\n")
-        append("Credit ${formatRupees(uiState.today.totalCredit)} Payments ${formatRupees(uiState.today.totalPayments)}\n")
-        append("This week: Credit ${formatRupees(uiState.weekCredit)} Payments ${formatRupees(uiState.weekPayments)} (${uiState.weekTxnCount} txns)\n")
-        append("Top debtors: $debtorsLine")
+        append(strings.header + "\n")
+        append(
+            resources.getString(
+                strings.todayLineTemplate,
+                formatRupees(uiState.today.totalCredit),
+                formatRupees(uiState.today.totalPayments),
+            ) + "\n",
+        )
+        append(
+            resources.getString(
+                strings.weekLineTemplate,
+                formatRupees(uiState.weekCredit),
+                formatRupees(uiState.weekPayments),
+                uiState.weekTxnCount,
+            ) + "\n",
+        )
+        append(resources.getString(strings.debtorsLineTemplate, debtorsLine))
     }
     val sendIntent = Intent(Intent.ACTION_SEND).apply {
         type = "text/plain"
-        putExtra(Intent.EXTRA_SUBJECT, "KhataAgent report — $shopName")
+        putExtra(Intent.EXTRA_SUBJECT, strings.subject)
         putExtra(Intent.EXTRA_TEXT, text)
     }
-    context.startActivity(Intent.createChooser(sendIntent, "Share report"))
+    context.startActivity(Intent.createChooser(sendIntent, strings.chooserTitle))
 }
 
 @Preview(showBackground = true, name = "Reports")

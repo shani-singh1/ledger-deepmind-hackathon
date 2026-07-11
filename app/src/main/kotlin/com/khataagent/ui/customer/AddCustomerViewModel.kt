@@ -12,6 +12,13 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
+/** Validation failures from [AddCustomerViewModel.save] — the screen maps these to localized text. */
+enum class AddCustomerError {
+    NAME_REQUIRED,
+    PHONE_LENGTH,
+    BALANCE_INVALID,
+}
+
 /**
  * Backs [AddCustomerScreen]. Plain form state + friendly (shopkeeper-language) validation.
  * On save: creates the customer via [LedgerRepository.addCustomer], then — if an opening
@@ -28,8 +35,8 @@ class AddCustomerViewModel(private val repository: LedgerRepository) : ViewModel
     private val _openingBalance = MutableStateFlow("")
     val openingBalance: StateFlow<String> = _openingBalance.asStateFlow()
 
-    private val _error = MutableStateFlow<String?>(null)
-    val error: StateFlow<String?> = _error.asStateFlow()
+    private val _error = MutableStateFlow<AddCustomerError?>(null)
+    val error: StateFlow<AddCustomerError?> = _error.asStateFlow()
 
     private val _saving = MutableStateFlow(false)
     val saving: StateFlow<Boolean> = _saving.asStateFlow()
@@ -57,18 +64,18 @@ class AddCustomerViewModel(private val repository: LedgerRepository) : ViewModel
     fun save() {
         val trimmedName = _name.value.trim()
         if (trimmedName.isBlank()) {
-            _error.value = "Please enter the customer's name."
+            _error.value = AddCustomerError.NAME_REQUIRED
             return
         }
         val phoneValue = _phone.value.trim()
         if (phoneValue.isNotBlank() && phoneValue.length != 10) {
-            _error.value = "Phone number should be 10 digits — or leave it blank."
+            _error.value = AddCustomerError.PHONE_LENGTH
             return
         }
         val balanceText = _openingBalance.value.trim()
         val openingAmount = if (balanceText.isBlank()) 0.0 else balanceText.toDoubleOrNull()
         if (balanceText.isNotBlank() && (openingAmount == null || openingAmount < 0.0)) {
-            _error.value = "Opening balance should be a valid amount."
+            _error.value = AddCustomerError.BALANCE_INVALID
             return
         }
 

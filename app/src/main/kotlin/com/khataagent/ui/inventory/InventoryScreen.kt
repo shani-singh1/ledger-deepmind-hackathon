@@ -32,10 +32,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.khataagent.R
 import com.khataagent.core.data.LedgerRepository
 import com.khataagent.core.model.InventoryItem
 import com.khataagent.fake.FakeLedgerRepository
@@ -53,8 +55,10 @@ import com.khataagent.ui.theme.KhataThemeExtras
 fun InventoryScreen(repository: LedgerRepository, modifier: Modifier = Modifier) {
     val viewModel: InventoryViewModel = viewModel(factory = SimpleViewModelFactory { InventoryViewModel(repository) })
     val inventory by viewModel.inventory.collectAsState()
+    val loading by viewModel.loading.collectAsState()
     InventoryContent(
         inventory = inventory,
+        loading = loading,
         onIncrement = { item -> viewModel.adjust(item, stepFor(item)) },
         onDecrement = { item -> viewModel.adjust(item, -stepFor(item)) },
         modifier = modifier,
@@ -66,16 +70,37 @@ private fun stepFor(item: InventoryItem): Double = when (item.unit.lowercase()) 
     else -> 1.0
 }
 
+/** Maps a few common raw unit codes to a localized display label; unrecognized units pass through as-is. */
+@Composable
+private fun localizedUnit(unit: String): String = when (unit.lowercase()) {
+    "kg" -> stringResource(R.string.unit_kg)
+    "g", "gram", "grams" -> stringResource(R.string.unit_g)
+    "l", "litre", "liter" -> stringResource(R.string.unit_l)
+    "ml" -> stringResource(R.string.unit_ml)
+    "pcs", "pc", "piece", "pieces" -> stringResource(R.string.unit_pcs)
+    "dozen" -> stringResource(R.string.unit_dozen)
+    else -> unit
+}
+
 @Composable
 private fun InventoryContent(
     inventory: List<InventoryItem>,
+    loading: Boolean,
     onIncrement: (InventoryItem) -> Unit,
     onDecrement: (InventoryItem) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     if (inventory.isEmpty()) {
         Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+            if (loading) {
+                CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+            } else {
+                Text(
+                    text = stringResource(R.string.inventory_empty_state),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
         }
         return
     }
@@ -86,7 +111,7 @@ private fun InventoryContent(
     ) {
         item {
             Text(
-                text = "Inventory",
+                text = stringResource(R.string.inventory_title),
                 style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier.padding(bottom = 4.dp),
@@ -134,15 +159,23 @@ private fun InventoryRow(item: InventoryItem, onIncrement: () -> Unit, onDecreme
                 }
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
-                    text = "${formatQty(item.qty)} ${item.unit}",
+                    text = "${formatQty(item.qty)} ${localizedUnit(item.unit)}",
                     style = MaterialTheme.typography.bodyMedium,
                     color = if (low) extras.credit else MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
             Row(verticalAlignment = Alignment.CenterVertically) {
-                StepperButton(icon = Icons.Filled.Remove, contentDescription = "Decrease ${item.item}", onClick = onDecrement)
+                StepperButton(
+                    icon = Icons.Filled.Remove,
+                    contentDescription = stringResource(R.string.inventory_cd_decrease, item.item),
+                    onClick = onDecrement,
+                )
                 Spacer(modifier = Modifier.width(4.dp))
-                StepperButton(icon = Icons.Filled.Add, contentDescription = "Increase ${item.item}", onClick = onIncrement)
+                StepperButton(
+                    icon = Icons.Filled.Add,
+                    contentDescription = stringResource(R.string.inventory_cd_increase, item.item),
+                    onClick = onIncrement,
+                )
             }
         }
     }
@@ -157,7 +190,7 @@ private fun LowChip() {
             .padding(horizontal = 8.dp, vertical = 2.dp),
     ) {
         Text(
-            text = "Low",
+            text = stringResource(R.string.inventory_low_chip),
             style = MaterialTheme.typography.labelSmall,
             color = extras.credit,
             fontWeight = FontWeight.SemiBold,
