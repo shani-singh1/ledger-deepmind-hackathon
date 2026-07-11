@@ -93,6 +93,9 @@ class AppContainer(context: Context, scope: CoroutineScope) {
     private val _voiceAvailable = MutableStateFlow(false)
     val voiceAvailable: () -> Boolean = { _voiceAvailable.value }
 
+    /** True only when a Gemini key is configured — gates the online audio-to-Gemini voice path. */
+    val cloudAvailable: Boolean = cloudEngine != null
+
     /** Human-readable brain label for the UI hint (cloud / on-device GPU / CPU). */
     private val _backendLabel = MutableStateFlow("starting…")
     val backendLabel: () -> String = { _backendLabel.value }

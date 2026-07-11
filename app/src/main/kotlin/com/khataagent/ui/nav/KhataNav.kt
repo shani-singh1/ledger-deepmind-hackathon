@@ -82,6 +82,7 @@ fun KhataNav(
     orchestrator: AgentOrchestrator,
     audioRecorder: AudioRecorder,
     voiceAvailable: () -> Boolean,
+    cloudAvailable: Boolean,
     escalationClient: EscalationClient,
     connectivityMonitor: ConnectivityMonitor,
     statusController: AppStatusController,
@@ -171,6 +172,7 @@ fun KhataNav(
                     audioRecorder = audioRecorder,
                     voiceAvailable = voiceAvailable,
                     isOnline = isOnline,
+                    cloudAvailable = cloudAvailable,
                 )
             }
             composable("customers") {

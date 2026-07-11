@@ -74,6 +74,7 @@ class MainActivity : ComponentActivity() {
                         orchestrator = appViewModel.orchestrator,
                         audioRecorder = appViewModel.audioRecorder,
                         voiceAvailable = appViewModel.voiceAvailable,
+                        cloudAvailable = appViewModel.cloudAvailable,
                         escalationClient = appViewModel.escalationClient,
                         connectivityMonitor = appViewModel.connectivity,
                         statusController = appViewModel.statusController,

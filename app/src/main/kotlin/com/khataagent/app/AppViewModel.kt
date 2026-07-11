@@ -17,6 +17,7 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
     val orchestrator = container.orchestrator
     val audioRecorder = container.audioRecorder
     val voiceAvailable = container.voiceAvailable
+    val cloudAvailable = container.cloudAvailable
     val backendLabel = container.backendLabel
 
     val connectivity = container.connectivity

@@ -73,9 +73,12 @@ import android.content.Intent
 import android.speech.RecognizerIntent
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.ui.platform.LocalContext
 import com.khataagent.agent.AgentOrchestrator
 import com.khataagent.agent.StubInferenceEngine
 import com.khataagent.audio.AudioRecorder
+import com.khataagent.audio.OnDeviceVoice
 import com.khataagent.audio.rememberTtsSpeaker
 import java.util.Locale
 import com.khataagent.data.StateBlockBuilderImpl
@@ -89,6 +92,7 @@ fun TodayScreen(
     audioRecorder: AudioRecorder,
     voiceAvailable: () -> Boolean,
     isOnline: Boolean,
+    cloudAvailable: Boolean,
     modifier: Modifier = Modifier,
 ) {
     val viewModel: TodayViewModel = viewModel(
@@ -112,7 +116,13 @@ fun TodayScreen(
             viewModel.onSubmitText(spoken)
         }
     }
-    // OFFLINE voice: the on-device speech recognizer (free-form) -> transcript -> local Gemma.
+    // OFFLINE voice: dedicated on-device recognizer (airplane-mode capable, no "voice search
+    // unavailable"). Falls back to the system voice activity only if on-device isn't installed.
+    val context = LocalContext.current
+    val onDeviceVoice = remember { OnDeviceVoice(context) }
+    DisposableEffect(Unit) { onDispose { onDeviceVoice.destroy() } }
+    var voiceListening by remember { mutableStateOf(false) }
+
     val startVoiceRecognizer: () -> Unit = {
         val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
             putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
@@ -122,17 +132,34 @@ fun TodayScreen(
         }
         runCatching { speechLauncher.launch(intent) }
     }
+    val startOfflineVoice: () -> Unit = {
+        if (onDeviceVoice.isAvailable()) {
+            voiceListening = true
+            onDeviceVoice.start(
+                languageTag = Locale.getDefault().toLanguageTag(),
+                onResult = { voiceListening = false; viewModel.onSubmitText(it) },
+                onError = { voiceListening = false },
+            )
+        } else {
+            startVoiceRecognizer()
+        }
+    }
 
     TodayContent(
         transactions = transactions,
         dailyState = dailyState,
         turnState = turnState,
         voiceEnabled = true,
-        // ONLINE: record audio and send it to Gemini's multimodal model (better at Hindi/mixed
-        // speech). OFFLINE: use the on-device recognizer -> text -> local Gemma.
-        onMicPress = { if (isOnline) viewModel.onMicPress() else startVoiceRecognizer() },
-        onMicRelease = { if (isOnline) viewModel.onMicRelease() },
-        onCancelListening = { if (isOnline) viewModel.onCancelListening() },
+        voiceListening = voiceListening,
+        // ONLINE + Gemini key: record audio -> Gemini's multimodal model (best at Hindi/mixed
+        // speech). Otherwise (offline, or online without a key): hold-to-talk on the on-device
+        // recognizer -> text -> routed brain (Gemma offline / Gemini text online).
+        onMicPress = { if (isOnline && cloudAvailable) viewModel.onMicPress() else startOfflineVoice() },
+        onMicRelease = { if (isOnline && cloudAvailable) viewModel.onMicRelease() else onDeviceVoice.stop() },
+        onCancelListening = {
+            if (isOnline && cloudAvailable) viewModel.onCancelListening()
+            else { voiceListening = false; onDeviceVoice.destroy() }
+        },
         onSubmitText = viewModel::onSubmitText,
         onAcceptDeferred = viewModel::onAcceptDeferred,
         onRejectDeferred = viewModel::onRejectDeferred,
@@ -457,6 +484,7 @@ private fun TodayScreenPreview() {
             audioRecorder = AudioRecorder(),
             voiceAvailable = { false },
             isOnline = false,
+            cloudAvailable = false,
         )
     }
 }

@@ -58,8 +58,14 @@ class StateBlockBuilderImpl(
         )
         sb.append("\n")
 
+        // The most relevant names for resolution: open-credit + recently-transacted, capped so the
+        // prefill stays small (latency) even with a big roster.
+        val priorityNames = LinkedHashSet<String>()
+        openCredits.forEach { priorityNames.add(it.first) }
+        recent.forEach { t -> t.customerName?.let { priorityNames.add(it) } }
+        customers.forEach { if (priorityNames.size < KNOWN_CUSTOMER_LIMIT) priorityNames.add(it.name) }
         sb.append("KNOWN CUSTOMERS: ")
-        sb.append(customers.joinToString(", ") { it.name })
+        sb.append(priorityNames.take(KNOWN_CUSTOMER_LIMIT).joinToString(", "))
 
         val text = sb.toString()
         return if (text.length > MAX_CHARS) text.substring(0, MAX_CHARS - 1) + "…" else text
@@ -79,9 +85,10 @@ class StateBlockBuilderImpl(
     private fun rupee(amount: Double): String = "₹" + String.format(Locale.US, "%.0f", amount)
 
     companion object {
-        /** Hard cap per build.md's prefill budget (state block capped, keeps prompt small). */
-        const val MAX_CHARS = 1200
+        /** Hard cap per build.md's prefill budget — tightened for lower latency. */
+        const val MAX_CHARS = 700
         const val RECENT_COUNT = 3
         const val TOP_OPEN_CREDITS = 5
+        const val KNOWN_CUSTOMER_LIMIT = 12
     }
 }
