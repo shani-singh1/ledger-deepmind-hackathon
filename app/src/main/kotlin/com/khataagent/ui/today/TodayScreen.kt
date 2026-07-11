@@ -65,12 +65,15 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.ui.platform.LocalContext
+import android.app.Activity
+import android.content.Intent
+import android.speech.RecognizerIntent
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import com.khataagent.agent.AgentOrchestrator
 import com.khataagent.agent.StubInferenceEngine
 import com.khataagent.audio.AudioRecorder
-import com.khataagent.audio.VoiceInput
+import java.util.Locale
 import com.khataagent.data.StateBlockBuilderImpl
 import com.khataagent.validate.KhataValidator
 import kotlinx.coroutines.delay
@@ -83,7 +86,6 @@ fun TodayScreen(
     voiceAvailable: () -> Boolean,
     modifier: Modifier = Modifier,
 ) {
-    val context = LocalContext.current
     val viewModel: TodayViewModel = viewModel(
         factory = SimpleViewModelFactory {
             TodayViewModel(repository, orchestrator, audioRecorder, voiceAvailable)
@@ -93,28 +95,36 @@ fun TodayScreen(
     val dailyState by viewModel.dailyState.collectAsState()
     val turnState by viewModel.turnState.collectAsState()
 
-    // Mic = on-device SpeechRecognizer -> transcript -> same Gemma text pipeline as typing.
-    val voiceInput = remember { VoiceInput(context) }
-    DisposableEffect(Unit) { onDispose { voiceInput.destroy() } }
-    var voiceListening by remember { mutableStateOf(false) }
+    // Mic: the system speech-recognition activity (offline-capable, big clear "Speak now" UI that
+    // non-technical shopkeepers get) -> transcript -> the SAME on-device Gemma turn as typing.
+    val speechLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.StartActivityForResult(),
+    ) { result ->
+        val spoken = result.data
+            ?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+            ?.firstOrNull()
+        if (result.resultCode == Activity.RESULT_OK && !spoken.isNullOrBlank()) {
+            viewModel.onSubmitText(spoken)
+        }
+    }
+    val startVoice: () -> Unit = {
+        val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
+            putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+            putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault().toLanguageTag())
+            putExtra(RecognizerIntent.EXTRA_PREFER_OFFLINE, true)
+            putExtra(RecognizerIntent.EXTRA_PROMPT, "Bolo… speak your entry")
+        }
+        runCatching { speechLauncher.launch(intent) }
+    }
 
     TodayContent(
         transactions = transactions,
         dailyState = dailyState,
         turnState = turnState,
-        voiceEnabled = voiceInput.available,
-        voiceListening = voiceListening,
-        onMicPress = {
-            if (voiceInput.available) {
-                voiceListening = true
-                voiceInput.start(
-                    onResult = { voiceListening = false; viewModel.onSubmitText(it) },
-                    onError = { voiceListening = false },
-                )
-            }
-        },
-        onMicRelease = { voiceInput.stop() },
-        onCancelListening = { voiceListening = false; voiceInput.stop() },
+        voiceEnabled = true,
+        onMicPress = startVoice,
+        onMicRelease = {},
+        onCancelListening = {},
         onSubmitText = viewModel::onSubmitText,
         onAcceptDeferred = viewModel::onAcceptDeferred,
         onRejectDeferred = viewModel::onRejectDeferred,
