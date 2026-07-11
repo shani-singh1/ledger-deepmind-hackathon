@@ -127,6 +127,18 @@ Both escalation targets shown live: **human** (confirm cards) and **cloud** (Gem
 
 ---
 
+## 🤝 Two collaborating agents (Problem Statement 2)
+
+Inside **Talk to AI**, two agents split the labour to manage the ledger by voice — no human hand-holding for the safe majority of actions, a clear human boundary on the risky ones:
+
+- **Agent A — Conversation Planner** (Gemini Live, `native-audio`): talks to the shopkeeper, understands intent, sequences multi-step work, and calls tools (`add_credit`, `record_payment`, `record_sale`, `delete_last_transaction`, `query_balance`, `query_today`).
+- **Agent B — Ledger Steward** (on-device): the guardian of data truth. It validates every proposed action against the shop's business rules and either **commits to SQLite** or returns a **structured conflict** (`over_limit`, `overpayment`, `unknown_customer`).
+
+**They resolve conflicts autonomously:** A proposes → B pushes back (`needs_confirmation`) → A explains the reason to the shopkeeper in one sentence → on agreement, A re-issues the call with `confirmed:true` → B commits. Messages flow as `toolCall ↔ toolResponse` over the Live socket.
+
+> *"Ramesh se 500 aaye" → A calls `record_payment` → B commits, replies "balance now ₹1,074" → A speaks it.*
+> *"Sita ko 20,000 udhaar" → B returns `over_limit` → A: "that's above your ₹5,000 limit, sure?" → "haan" → A retries `confirmed:true` → B commits.*
+
 ## 🧰 Tech stack
 
 Kotlin · Jetpack Compose (Material 3) · Room · Coroutines/Flow · **Gemma 4 E2B** · **LiteRT-LM** (on-device GPU inference) · **Gemini API** (text, native-audio, Live API) · Android SpeechRecognizer + TextToSpeech · OkHttp.
