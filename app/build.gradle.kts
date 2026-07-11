@@ -15,9 +15,18 @@ android {
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
+
+        // P2 cloud escalation (BUILD.md item 11): real Gemini key, never hardcoded. Supply via
+        // `-Pgemini.key=...` or the GEMINI_API_KEY env var; defaults to "" so a keyless build
+        // still compiles and AppContainer falls back to the fake escalation client for the demo.
+        val geminiKey = (project.findProperty("gemini.key") as String?)
+            ?: System.getenv("GEMINI_API_KEY")
+            ?: ""
+        buildConfigField("String", "GEMINI_API_KEY", "\"$geminiKey\"")
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11

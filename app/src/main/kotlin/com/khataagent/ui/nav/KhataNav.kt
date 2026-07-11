@@ -3,6 +3,7 @@ package com.khataagent.ui.nav
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.History
+import androidx.compose.material.icons.filled.People
 import androidx.compose.material.icons.filled.QueryStats
 import androidx.compose.material.icons.automirrored.filled.ReceiptLong
 import androidx.compose.material.icons.filled.WifiOff
@@ -24,10 +25,12 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.khataagent.agent.AgentOrchestrator
 import com.khataagent.audio.AudioRecorder
 import com.khataagent.core.AgentStatus
@@ -36,6 +39,8 @@ import com.khataagent.core.escalate.ConnectivityMonitor
 import com.khataagent.core.escalate.EscalationClient
 import com.khataagent.status.AppStatusController
 import com.khataagent.ui.components.StatusPill
+import com.khataagent.ui.customer.CustomerDetailScreen
+import com.khataagent.ui.customer.CustomerListScreen
 import com.khataagent.ui.log.AgentLogScreen
 import com.khataagent.ui.insights.InsightsScreen
 import com.khataagent.ui.today.TodayScreen
@@ -44,9 +49,15 @@ private sealed class KhataDestination(val route: String, val label: String, val 
     data object Today : KhataDestination("today", "Today", Icons.AutoMirrored.Filled.ReceiptLong)
     data object Log : KhataDestination("log", "Agent Log", Icons.Filled.History)
     data object Insights : KhataDestination("insights", "Insights", Icons.Filled.QueryStats)
+    data object Customers : KhataDestination("customers", "Customers", Icons.Filled.People)
 }
 
-private val bottomDestinations = listOf(KhataDestination.Today, KhataDestination.Log, KhataDestination.Insights)
+/** Not a bottom-nav destination — pushed on top of [KhataDestination.Customers]. */
+private const val CustomerDetailRoute = "customer/{customerId}"
+private const val CustomerDetailArg = "customerId"
+
+private val bottomDestinations =
+    listOf(KhataDestination.Today, KhataDestination.Log, KhataDestination.Insights, KhataDestination.Customers)
 
 /**
  * Single-activity NavHost. Confirm is deliberately NOT a destination — it's a modal bottom
@@ -128,6 +139,25 @@ fun KhataNav(
                     escalationClient = escalationClient,
                     connectivityMonitor = connectivityMonitor,
                     statusController = statusController,
+                )
+            }
+            composable(KhataDestination.Customers.route) {
+                CustomerListScreen(
+                    repository = repository,
+                    onCustomerClick = { customerId ->
+                        navController.navigate("customer/$customerId")
+                    },
+                )
+            }
+            composable(
+                route = CustomerDetailRoute,
+                arguments = listOf(navArgument(CustomerDetailArg) { type = NavType.LongType }),
+            ) { backStackEntry ->
+                val customerId = backStackEntry.arguments?.getLong(CustomerDetailArg) ?: 0L
+                CustomerDetailScreen(
+                    repository = repository,
+                    customerId = customerId,
+                    onBack = { navController.popBackStack() },
                 )
             }
         }

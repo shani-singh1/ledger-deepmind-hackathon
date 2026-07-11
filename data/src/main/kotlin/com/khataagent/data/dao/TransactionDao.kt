@@ -33,6 +33,10 @@ interface TransactionDao {
     @Query("SELECT * FROM transactions WHERE createdAt >= :sinceMillis ORDER BY createdAt DESC")
     fun observeSince(sinceMillis: Long): Flow<List<TransactionEntity>>
 
+    /** Full history for one customer, newest first — backs the customer drill-down screen. */
+    @Query("SELECT * FROM transactions WHERE customerId = :customerId ORDER BY createdAt DESC")
+    fun observeForCustomer(customerId: Long): Flow<List<TransactionEntity>>
+
     /** SUM(credit) - SUM(payment) over CONFIRMED transactions for one customer. */
     @Query(
         """

@@ -90,6 +90,9 @@ class RoomLedgerRepository(
         transactionDao.observeSince(startOfDayMillis(LocalDate.now(ZoneId.systemDefault())))
             .map { list -> list.map { it.toDomain() } }
 
+    override fun observeTransactionsForCustomer(customerId: Long): Flow<List<Transaction>> =
+        transactionDao.observeForCustomer(customerId).map { list -> list.map { it.toDomain() } }
+
     // ---- inventory ----
 
     override suspend fun getInventory(): List<InventoryItem> =

@@ -27,6 +27,8 @@ interface LedgerRepository {
     suspend fun transactionsSince(sinceMillis: Long): List<Transaction>
     suspend fun outstandingBalance(customerId: Long): Double
     fun observeTodayTransactions(): Flow<List<Transaction>>
+    /** Full transaction history for one customer, newest first. Drives the customer drill-down screen. */
+    fun observeTransactionsForCustomer(customerId: Long): Flow<List<Transaction>>
 
     // ---- inventory ----
     suspend fun getInventory(): List<InventoryItem>

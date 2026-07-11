@@ -1,6 +1,7 @@
 package com.khataagent.di
 
 import android.content.Context
+import com.khataagent.BuildConfig
 import com.khataagent.agent.AgentOrchestrator
 import com.khataagent.agent.LiteRtInferenceEngine
 import com.khataagent.agent.StubInferenceEngine
@@ -11,9 +12,11 @@ import com.khataagent.data.RoomLedgerRepository
 import com.khataagent.data.provideDatabase
 import com.khataagent.data.provideStateBlockBuilder
 import com.khataagent.engine.ResilientInferenceEngine
+import com.khataagent.escalate.GeminiEscalationClient
 import com.khataagent.fake.FakeConnectivityMonitor
 import com.khataagent.fake.FakeEscalationClient
 import com.khataagent.status.AppStatusController
+import com.khataagent.core.escalate.EscalationClient
 import com.khataagent.validate.KhataValidator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,9 +25,13 @@ import kotlinx.coroutines.launch
 /**
  * Phase-2 manual DI. The LOCAL LOOP is fully real: Room repository (seeded), the KhataValidator
  * "check step", the state-block builder, and the LiteRT-LM Gemma engine (stub fallback) behind
- * the AgentOrchestrator. Connectivity + escalation stay on the polished fakes (no Gemini key at
- * the venue), gated by a manual online/offline toggle for reliable stage control of the Insights
- * demo. The whole local pipeline is unaffected by any of that — it never touches the network.
+ * the AgentOrchestrator. Connectivity stays on the toggleable [FakeConnectivityMonitor] for
+ * reliable stage control (flip online/offline without touching the device radio); escalation
+ * uses the real [GeminiEscalationClient] gated by that same monitor when a Gemini API key is
+ * configured (see `gemini.key` / `GEMINI_API_KEY` in app/build.gradle.kts), falling back to the
+ * polished [FakeEscalationClient] otherwise so the Insights demo never depends on a key being
+ * present at the venue. The whole local pipeline is unaffected by any of that — it never touches
+ * the network.
  */
 class AppContainer(context: Context, scope: CoroutineScope) {
 
@@ -59,9 +66,23 @@ class AppContainer(context: Context, scope: CoroutineScope) {
 
     val audioRecorder = AudioRecorder()
 
-    // Escalation / connectivity: kept on fakes (P2 polish, no API key). Manual toggle drives them.
+    // P2 cloud escalation (BUILD.md item 11). Connectivity stays on the toggleable fake so the
+    // top-bar status pill + the manual online/offline switch keep working for stage control
+    // (AndroidConnectivityMonitor has no toggle -- see MainActivity's onToggleConnectivity). The
+    // *client* behind it is the real GeminiEscalationClient when a key is available: online -> a
+    // real Gemini call gated by this same monitor; offline (toggled) -> queued, exactly like the
+    // fake did. With no key configured (BuildConfig.GEMINI_API_KEY blank), fall back to the fake
+    // client so the Insights demo still renders canned reports without crashing on a 400.
     val connectivity = FakeConnectivityMonitor(initiallyOnline = true)
-    val escalationClient = FakeEscalationClient(connectivity)
+    val escalationClient: EscalationClient =
+        if (BuildConfig.GEMINI_API_KEY.isNotBlank()) {
+            GeminiEscalationClient(
+                connectivityMonitor = connectivity,
+                apiKey = BuildConfig.GEMINI_API_KEY,
+            )
+        } else {
+            FakeEscalationClient(connectivity)
+        }
     val statusController = AppStatusController(connectivity, scope)
 
     private val _voiceAvailable = MutableStateFlow(false)

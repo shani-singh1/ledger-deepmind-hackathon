@@ -110,6 +110,11 @@ class FakeLedgerRepository : LedgerRepository {
         }
     }
 
+    override fun observeTransactionsForCustomer(customerId: Long): Flow<List<Transaction>> =
+        _transactions.map { list ->
+            list.filter { it.customerId == customerId }.sortedByDescending { it.createdAt }
+        }
+
     // ---- inventory ----
 
     override suspend fun getInventory(): List<InventoryItem> = _inventory.value

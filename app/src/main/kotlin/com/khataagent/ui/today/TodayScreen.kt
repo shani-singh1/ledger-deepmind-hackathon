@@ -73,6 +73,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import com.khataagent.agent.AgentOrchestrator
 import com.khataagent.agent.StubInferenceEngine
 import com.khataagent.audio.AudioRecorder
+import com.khataagent.audio.rememberTtsSpeaker
 import java.util.Locale
 import com.khataagent.data.StateBlockBuilderImpl
 import com.khataagent.validate.KhataValidator
@@ -152,9 +153,11 @@ fun TodayContent(
 ) {
     val isListening = voiceListening || turnState is TurnState.Listening
     val isBusy = turnState is TurnState.Inferring || turnState is TurnState.Validating
+    val tts = rememberTtsSpeaker()
 
-    // Auto-dismiss the committed/rejected toast and return the turn machine to Idle.
+    // Speak the confirmation aloud (offline TTS), then auto-dismiss + return the machine to Idle.
     LaunchedEffect(turnState) {
+        if (turnState is TurnState.Committed) tts.speak(turnState.spokenConfirmation)
         if (turnState is TurnState.Committed || turnState is TurnState.Rejected) {
             delay(2200)
             onAcknowledge()
