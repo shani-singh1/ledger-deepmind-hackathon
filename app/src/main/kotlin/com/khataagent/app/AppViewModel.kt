@@ -1,21 +1,25 @@
 package com.khataagent.app
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.khataagent.fake.FakeConnectivityMonitor
-import com.khataagent.fake.FakeEscalationClient
-import com.khataagent.fake.FakeLedgerRepository
-import com.khataagent.status.AppStatusController
+import com.khataagent.di.AppContainer
 
 /**
- * Holds the app-lifetime fakes (survives configuration changes) — the seam the integrator
- * will replace in Phase 2: swap [FakeLedgerRepository] for the real :data Room impl,
- * [FakeEscalationClient] for the real :escalate Gemini client, and wire a real Android
- * ConnectivityManager-backed monitor in place of [FakeConnectivityMonitor].
+ * App-lifetime holder (survives config changes). Phase 2: the fakes are gone from the local loop —
+ * [AppContainer] exposes the real Room repository + AgentOrchestrator (Gemma on-device). Escalation
+ * and connectivity remain on the container's fakes for the Insights demo.
  */
-class AppViewModel : ViewModel() {
-    val repository = FakeLedgerRepository()
-    val connectivity = FakeConnectivityMonitor(initiallyOnline = true)
-    val escalationClient = FakeEscalationClient(connectivity)
-    val statusController = AppStatusController(connectivity, viewModelScope)
+class AppViewModel(app: Application) : AndroidViewModel(app) {
+    private val container = AppContainer(app, viewModelScope)
+
+    val repository = container.repository
+    val orchestrator = container.orchestrator
+    val audioRecorder = container.audioRecorder
+    val voiceAvailable = container.voiceAvailable
+    val backendLabel = container.backendLabel
+
+    val connectivity = container.connectivity
+    val escalationClient = container.escalationClient
+    val statusController = container.statusController
 }

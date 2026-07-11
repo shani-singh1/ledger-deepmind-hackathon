@@ -48,6 +48,10 @@ dependencies {
     implementation(project(":validate"))
     implementation(project(":escalate"))
 
+    // Needed so the DI container can hold the Room KhataDatabase instance (share it between the
+    // repository and the demo seeder). Room impl otherwise lives inside :data.
+    implementation(libs.androidx.room.runtime)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
