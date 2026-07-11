@@ -62,6 +62,7 @@ import com.khataagent.ui.customer.CustomerDetailScreen
 import com.khataagent.ui.customer.CustomerListScreen
 import com.khataagent.ui.insights.InsightsScreen
 import com.khataagent.ui.inventory.InventoryScreen
+import com.khataagent.ui.live.LiveChatScreen
 import com.khataagent.ui.log.AgentLogScreen
 import com.khataagent.ui.reports.ReportsScreen
 import com.khataagent.ui.settings.SettingsScreen
@@ -209,7 +210,19 @@ fun KhataNav(
                     onBack = { navController.popBackStack() },
                 )
             }
-            composable("reports") { ReportsScreen(repository = repository) }
+            composable("reports") {
+                ReportsScreen(
+                    repository = repository,
+                    onLiveChat = { navController.navigate("live_chat") },
+                )
+            }
+            composable("live_chat") {
+                LiveChatScreen(
+                    repository = repository,
+                    connectivityMonitor = connectivityMonitor,
+                    onBack = { navController.popBackStack() },
+                )
+            }
             composable("insights") {
                 InsightsScreen(
                     repository = repository,

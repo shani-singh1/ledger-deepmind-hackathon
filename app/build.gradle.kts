@@ -21,6 +21,10 @@ android {
         // still compiles and AppContainer falls back to the fake escalation client for the demo.
         val geminiKey = (project.findProperty("gemini.key") as String?)
             ?: System.getenv("GEMINI_API_KEY")
+            ?: rootProject.file(".env").takeIf { it.exists() }
+                ?.readLines()
+                ?.firstOrNull { it.trim().startsWith("GEMINI_API_KEY") }
+                ?.substringAfter("=")?.trim()?.trim('"', '\'')
             ?: ""
         buildConfigField("String", "GEMINI_API_KEY", "\"$geminiKey\"")
     }
@@ -77,4 +81,5 @@ dependencies {
 
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.okhttp) // live Gemini voice chat (WebSocket)
 }

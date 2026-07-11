@@ -17,8 +17,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.GraphicEq
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -61,7 +63,11 @@ private val reportDateFormat = SimpleDateFormat("d MMM yyyy", Locale.getDefault(
  * and hands it to any installed app (WhatsApp, notes, SMS) via [Intent.ACTION_SEND].
  */
 @Composable
-fun ReportsScreen(repository: LedgerRepository, modifier: Modifier = Modifier) {
+fun ReportsScreen(
+    repository: LedgerRepository,
+    onLiveChat: () -> Unit = {},
+    modifier: Modifier = Modifier,
+) {
     val viewModel: ReportsViewModel = viewModel(factory = SimpleViewModelFactory { ReportsViewModel(repository) })
     val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
@@ -81,6 +87,7 @@ fun ReportsScreen(repository: LedgerRepository, modifier: Modifier = Modifier) {
         uiState = uiState,
         shopName = shopName,
         onShare = { shareReport(context, uiState, shareStrings, resources) },
+        onLiveChat = onLiveChat,
         modifier = modifier,
     )
 }
@@ -101,6 +108,7 @@ private fun ReportsContent(
     uiState: ReportsUiState,
     shopName: String,
     onShare: () -> Unit,
+    onLiveChat: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     if (uiState.loading && uiState.today.txnCount == 0 && uiState.topDebtors.isEmpty()) {
@@ -149,8 +157,23 @@ private fun ReportsContent(
         }
         item {
             Button(
+                onClick = onLiveChat,
+                modifier = Modifier.fillMaxWidth().height(56.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
+            ) {
+                Icon(imageVector = Icons.Filled.GraphicEq, contentDescription = null)
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(stringResource(R.string.reports_live_chat), style = MaterialTheme.typography.titleMedium)
+            }
+        }
+        item {
+            Button(
                 onClick = onShare,
                 modifier = Modifier.fillMaxWidth().height(52.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                    contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                ),
             ) {
                 Icon(imageVector = Icons.Filled.Share, contentDescription = null)
                 Spacer(modifier = Modifier.width(8.dp))

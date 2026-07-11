@@ -97,6 +97,7 @@
     <string name="reports_txn_count_one">%1$d transaction</string>
     <string name="reports_txn_count_other">%1$d transactions</string>
     <string name="reports_share_button">Share report</string>
+    <string name="reports_live_chat">Talk to AI about your books</string>
     <string name="reports_top_debtors">Top debtors</string>
     <string name="reports_no_debtors">Nobody owes you right now — every customer is settled up.</string>
     <string name="reports_share_subject">KhataAgent report — %1$s</string>
