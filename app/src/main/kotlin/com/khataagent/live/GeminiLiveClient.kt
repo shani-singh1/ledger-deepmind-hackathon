@@ -92,17 +92,26 @@ class GeminiLiveClient(
         val request = Request.Builder().url("$WS_URL?key=$apiKey").build()
         webSocket = httpClient.newWebSocket(request, object : WebSocketListener() {
             override fun onOpen(ws: WebSocket, response: Response) {
+                android.util.Log.i("KhataLive", "onOpen ($model) — sending setup")
                 ws.send(buildSetupMessage(model))
             }
 
             override fun onMessage(ws: WebSocket, text: String) {
+                android.util.Log.i("KhataLive", "onMessage(text) ${text.take(120)}")
+                handleServerMessage(text)
+            }
+
+            // The Live API sends server frames as BINARY — decode to UTF-8 JSON. Without this,
+            // setupComplete + audio are silently dropped and the UI stays on "Connecting".
+            override fun onMessage(ws: WebSocket, bytes: okio.ByteString) {
+                val text = bytes.utf8()
+                android.util.Log.i("KhataLive", "onMessage(bytes) ${text.take(120)}")
                 handleServerMessage(text)
             }
 
             override fun onFailure(ws: WebSocket, t: Throwable, response: Response?) {
+                android.util.Log.w("KhataLive", "onFailure code=${response?.code} msg=${t.message} body=${runCatching { response?.body?.string() }.getOrNull()?.take(200)}")
                 if (!usedFallback && model == primaryModel) {
-                    // First model errored (e.g. not available on this key/region) — retry once
-                    // with the older fallback model before surfacing an error to the user.
                     usedFallback = true
                     openSocket(fallbackModel)
                 } else {
@@ -110,7 +119,12 @@ class GeminiLiveClient(
                 }
             }
 
+            override fun onClosing(ws: WebSocket, code: Int, reason: String) {
+                android.util.Log.w("KhataLive", "onClosing code=$code reason=$reason")
+            }
+
             override fun onClosed(ws: WebSocket, code: Int, reason: String) {
+                android.util.Log.w("KhataLive", "onClosed code=$code reason=$reason")
                 if (_status.value !is LiveStatus.Error) _status.value = LiveStatus.Idle
             }
         })
