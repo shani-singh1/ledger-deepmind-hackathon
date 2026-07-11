@@ -1,5 +1,6 @@
 package com.khataagent.fake
 
+import com.khataagent.core.escalate.ConnectivityMonitor
 import com.khataagent.core.escalate.EscalationClient
 import com.khataagent.core.escalate.EscalationReport
 import com.khataagent.core.escalate.EscalationResult
@@ -13,7 +14,7 @@ import kotlinx.coroutines.delay
  * canned markdown report so Insights has real content to render.
  */
 class FakeEscalationClient(
-    private val connectivity: FakeConnectivityMonitor,
+    private val connectivity: ConnectivityMonitor,
 ) : EscalationClient {
 
     override suspend fun requestReport(snapshot: LedgerSnapshot, kind: ReportKind): EscalationResult {

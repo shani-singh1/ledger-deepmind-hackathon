@@ -11,9 +11,12 @@ import com.khataagent.data.DemoSeed
 import com.khataagent.data.RoomLedgerRepository
 import com.khataagent.data.provideDatabase
 import com.khataagent.data.provideStateBlockBuilder
+import com.khataagent.connectivity.DemoConnectivityMonitor
+import com.khataagent.core.agent.InferenceEngine
 import com.khataagent.engine.ResilientInferenceEngine
+import com.khataagent.engine.RoutingInferenceEngine
 import com.khataagent.escalate.GeminiEscalationClient
-import com.khataagent.fake.FakeConnectivityMonitor
+import com.khataagent.escalate.GeminiInferenceEngine
 import com.khataagent.fake.FakeEscalationClient
 import com.khataagent.status.AppStatusController
 import com.khataagent.core.escalate.EscalationClient
@@ -55,7 +58,18 @@ class AppContainer(context: Context, scope: CoroutineScope) {
         "gemma-4-E2B-it.litertlm",
     )
     private val liteRt = LiteRtInferenceEngine(appContext, modelFile.absolutePath)
-    private val engine = ResilientInferenceEngine(primary = liteRt, fallback = StubInferenceEngine())
+    private val localEngine = ResilientInferenceEngine(primary = liteRt, fallback = StubInferenceEngine())
+
+    // Live internet state -> automatic online/offline switching (manual override for stage control).
+    val connectivity = DemoConnectivityMonitor(appContext)
+
+    private val geminiKey = BuildConfig.GEMINI_API_KEY
+    private val cloudEngine: InferenceEngine? =
+        if (geminiKey.isNotBlank()) GeminiInferenceEngine(apiKey = geminiKey) else null
+
+    // ONLINE -> Gemini (cloud); OFFLINE -> on-device Gemma. Decided per turn from live connectivity;
+    // the cloud path falls back to local on any failure so a turn never dies on a flaky network.
+    private val engine = RoutingInferenceEngine(local = localEngine, cloud = cloudEngine, connectivity = connectivity)
 
     val orchestrator = AgentOrchestrator(
         engine = engine,
@@ -66,20 +80,11 @@ class AppContainer(context: Context, scope: CoroutineScope) {
 
     val audioRecorder = AudioRecorder()
 
-    // P2 cloud escalation (BUILD.md item 11). Connectivity stays on the toggleable fake so the
-    // top-bar status pill + the manual online/offline switch keep working for stage control
-    // (AndroidConnectivityMonitor has no toggle -- see MainActivity's onToggleConnectivity). The
-    // *client* behind it is the real GeminiEscalationClient when a key is available: online -> a
-    // real Gemini call gated by this same monitor; offline (toggled) -> queued, exactly like the
-    // fake did. With no key configured (BuildConfig.GEMINI_API_KEY blank), fall back to the fake
-    // client so the Insights demo still renders canned reports without crashing on a 400.
-    val connectivity = FakeConnectivityMonitor(initiallyOnline = true)
+    // Escalation: real Gemini when a key is set (gated by the same connectivity), else the polished
+    // fake so Insights still renders keylessly.
     val escalationClient: EscalationClient =
-        if (BuildConfig.GEMINI_API_KEY.isNotBlank()) {
-            GeminiEscalationClient(
-                connectivityMonitor = connectivity,
-                apiKey = BuildConfig.GEMINI_API_KEY,
-            )
+        if (geminiKey.isNotBlank()) {
+            GeminiEscalationClient(connectivityMonitor = connectivity, apiKey = geminiKey)
         } else {
             FakeEscalationClient(connectivity)
         }
@@ -88,7 +93,7 @@ class AppContainer(context: Context, scope: CoroutineScope) {
     private val _voiceAvailable = MutableStateFlow(false)
     val voiceAvailable: () -> Boolean = { _voiceAvailable.value }
 
-    /** Human-readable backend for the UI hint ("on-device GPU" / "CPU" / "demo mode"). */
+    /** Human-readable brain label for the UI hint (cloud / on-device GPU / CPU). */
     private val _backendLabel = MutableStateFlow("starting…")
     val backendLabel: () -> String = { _backendLabel.value }
 
@@ -96,11 +101,11 @@ class AppContainer(context: Context, scope: CoroutineScope) {
         scope.launch {
             runCatching { DemoSeed.seedIfEmpty(db) }
             runCatching { engine.warmUp() }
-            _voiceAvailable.value = engine.usingRealEngine && liteRt.audioAvailable
-            _backendLabel.value = when (engine.backend) {
-                InferenceBackend.GPU -> "on-device · GPU"
-                InferenceBackend.CPU -> "on-device · CPU"
-                InferenceBackend.STUB -> "demo mode (model not loaded)"
+            _backendLabel.value = when {
+                cloudEngine != null && connectivity.isOnline.value -> "cloud · Gemini"
+                localEngine.backend == InferenceBackend.GPU -> "on-device · GPU"
+                localEngine.backend == InferenceBackend.CPU -> "on-device · CPU"
+                else -> "on-device"
             }
         }
     }
