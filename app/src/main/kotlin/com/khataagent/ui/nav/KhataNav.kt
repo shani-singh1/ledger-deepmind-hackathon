@@ -170,6 +170,7 @@ fun KhataNav(
                     orchestrator = orchestrator,
                     audioRecorder = audioRecorder,
                     voiceAvailable = voiceAvailable,
+                    isOnline = isOnline,
                 )
             }
             composable("customers") {

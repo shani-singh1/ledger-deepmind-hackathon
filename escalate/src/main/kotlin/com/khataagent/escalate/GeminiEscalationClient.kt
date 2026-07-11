@@ -116,7 +116,13 @@ internal data class GeminiRequest(val contents: List<GeminiContent>)
 internal data class GeminiContent(val parts: List<GeminiPart>, val role: String? = null)
 
 @Serializable
-internal data class GeminiPart(val text: String)
+internal data class GeminiPart(
+    val text: String? = null,
+    val inlineData: GeminiInlineData? = null,
+)
+
+@Serializable
+internal data class GeminiInlineData(val mimeType: String, val data: String)
 
 @Serializable
 internal data class GeminiResponse(val candidates: List<GeminiCandidate> = emptyList())

@@ -88,6 +88,7 @@ fun TodayScreen(
     orchestrator: AgentOrchestrator,
     audioRecorder: AudioRecorder,
     voiceAvailable: () -> Boolean,
+    isOnline: Boolean,
     modifier: Modifier = Modifier,
 ) {
     val viewModel: TodayViewModel = viewModel(
@@ -111,7 +112,8 @@ fun TodayScreen(
             viewModel.onSubmitText(spoken)
         }
     }
-    val startVoice: () -> Unit = {
+    // OFFLINE voice: the on-device speech recognizer (free-form) -> transcript -> local Gemma.
+    val startVoiceRecognizer: () -> Unit = {
         val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
             putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
             putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault().toLanguageTag())
@@ -126,9 +128,11 @@ fun TodayScreen(
         dailyState = dailyState,
         turnState = turnState,
         voiceEnabled = true,
-        onMicPress = startVoice,
-        onMicRelease = {},
-        onCancelListening = {},
+        // ONLINE: record audio and send it to Gemini's multimodal model (better at Hindi/mixed
+        // speech). OFFLINE: use the on-device recognizer -> text -> local Gemma.
+        onMicPress = { if (isOnline) viewModel.onMicPress() else startVoiceRecognizer() },
+        onMicRelease = { if (isOnline) viewModel.onMicRelease() },
+        onCancelListening = { if (isOnline) viewModel.onCancelListening() },
         onSubmitText = viewModel::onSubmitText,
         onAcceptDeferred = viewModel::onAcceptDeferred,
         onRejectDeferred = viewModel::onRejectDeferred,
@@ -452,6 +456,7 @@ private fun TodayScreenPreview() {
             ),
             audioRecorder = AudioRecorder(),
             voiceAvailable = { false },
+            isOnline = false,
         )
     }
 }

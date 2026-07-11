@@ -40,13 +40,55 @@ class GeminiInferenceEngine(
             }
         }
 
-    // Audio is handled upstream by Android SpeechRecognizer -> text; cloud just sees the transcript.
+    /**
+     * ONLINE voice path: send the raw recorded audio straight to Gemini's multimodal model (far
+     * better at Hindi/Kannada/mixed speech than the on-device recognizer). Gemini transcribes AND
+     * turns it into the tool call in one shot.
+     */
     override suspend fun generateWithAudio(
         prompt: String,
         audioPcm: ShortArray,
         sampleRate: Int,
         maxTokens: Int,
-    ): String = generate(prompt, maxTokens)
+    ): String = withContext(Dispatchers.IO) {
+        withTimeout(timeoutMillis) {
+            val wav = pcmToWav(audioPcm, sampleRate)
+            val b64 = java.util.Base64.getEncoder().encodeToString(wav)
+            val requestJson = json.encodeToString(
+                GeminiRequest.serializer(),
+                GeminiRequest(
+                    contents = listOf(
+                        GeminiContent(
+                            parts = listOf(
+                                GeminiPart(text = prompt),
+                                GeminiPart(inlineData = GeminiInlineData(mimeType = "audio/wav", data = b64)),
+                            ),
+                        ),
+                    ),
+                ),
+            )
+            val url = "https://generativelanguage.googleapis.com/v1beta/models/$model:generateContent?key=$apiKey"
+            val raw = httpPoster.post(url, requestJson)
+            json.decodeFromString(GeminiResponse.serializer(), raw)
+                .candidates.firstOrNull()?.content?.parts?.firstOrNull { it.text != null }?.text
+                ?: ""
+        }
+    }
 
     override fun close() = Unit
+
+    /** 16-bit PCM (mono) -> a minimal WAV container Gemini accepts as audio/wav. */
+    private fun pcmToWav(pcm: ShortArray, sampleRate: Int): ByteArray {
+        val dataSize = pcm.size * 2
+        val out = java.io.ByteArrayOutputStream(44 + dataSize)
+        fun str(s: String) = out.write(s.toByteArray(Charsets.US_ASCII))
+        fun i32(v: Int) { out.write(v and 0xFF); out.write((v shr 8) and 0xFF); out.write((v shr 16) and 0xFF); out.write((v shr 24) and 0xFF) }
+        fun i16(v: Int) { out.write(v and 0xFF); out.write((v shr 8) and 0xFF) }
+        str("RIFF"); i32(36 + dataSize); str("WAVE")
+        str("fmt "); i32(16); i16(1); i16(1)               // PCM, mono
+        i32(sampleRate); i32(sampleRate * 2); i16(2); i16(16)
+        str("data"); i32(dataSize)
+        for (s in pcm) { val v = s.toInt(); out.write(v and 0xFF); out.write((v shr 8) and 0xFF) }
+        return out.toByteArray()
+    }
 }

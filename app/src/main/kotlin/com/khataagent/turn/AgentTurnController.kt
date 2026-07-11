@@ -33,9 +33,8 @@ class AgentTurnController(
         scope.launch { orchestrator.state.collect { _state.value = it } }
     }
 
-    /** Mic down — freeze-frame + start capturing (perceived-latency trick). */
+    /** Mic down — freeze-frame + start capturing PCM (used for the ONLINE Gemini-audio path). */
     fun beginListening() {
-        if (!voiceAvailable()) return
         _state.value = TurnState.Listening
         runCatching { audioRecorder.start() }
     }
@@ -45,14 +44,13 @@ class AgentTurnController(
         _state.value = TurnState.Idle
     }
 
-    /** Mic up — run the real audio turn, or nudge the user to type if this model has no audio tower. */
+    /** Mic up — submit the recorded audio (routed to Gemini's audio model when online). */
     fun submitTurn() {
-        if (!voiceAvailable()) {
-            _state.value = TurnState.Errored("Voice isn't available on this model — type the entry below.")
-            scope.launch { delay(1800); if (_state.value is TurnState.Errored) _state.value = TurnState.Idle }
+        val pcm = runCatching { audioRecorder.stop() }.getOrNull() ?: ShortArray(0)
+        if (pcm.size < 800) { // < ~50ms captured: a stray tap, not speech
+            _state.value = TurnState.Idle
             return
         }
-        val pcm = runCatching { audioRecorder.stop() }.getOrNull() ?: ShortArray(0)
         scope.launch { orchestrator.submitAudio(pcm) }
     }
 

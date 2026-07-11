@@ -104,6 +104,13 @@ fun ConfirmSheetContent(
     val (kindLabel, kindIcon, _) = deferKindMeta(card.kind)
     val accent = MaterialTheme.colorScheme.primary
 
+    // A greeting / chit-chat / unparseable reply is NOT a ledger entry — don't scare the shopkeeper
+    // with an accept/reject-to-ledger. Show gentle "say it again clearly" guidance with one button.
+    if (card.kind == DeferKind.CLARIFICATION || card.kind == DeferKind.SCHEMA) {
+        GuidanceContent(card = card, kindLabel = kindLabel, kindIcon = kindIcon, onOk = onReject)
+        return
+    }
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -207,6 +214,67 @@ fun ConfirmSheetContent(
                 Text(stringResource(R.string.confirm_accept))
             }
         }
+    }
+}
+
+/** Gentle "I didn't catch a khata entry — say it again clearly" panel (one OK button). */
+@Composable
+private fun GuidanceContent(
+    card: ConfirmCard,
+    kindLabel: String,
+    kindIcon: androidx.compose.ui.graphics.vector.ImageVector,
+    onOk: () -> Unit,
+) {
+    val accent = MaterialTheme.colorScheme.primary
+    val message = (card.understoodAs as? ToolCall.AskClarification)?.question?.takeIf { it.isNotBlank() }
+        ?: card.humanReason
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp)
+            .padding(bottom = 28.dp),
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Box(
+                modifier = Modifier
+                    .size(36.dp)
+                    .background(accent.copy(alpha = 0.12f), CircleShape),
+                contentAlignment = Alignment.Center,
+            ) { Icon(kindIcon, contentDescription = null, tint = accent, modifier = Modifier.size(18.dp)) }
+            Spacer(modifier = Modifier.size(10.dp))
+            Text(
+                text = kindLabel,
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onSurface,
+            )
+        }
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(
+            text = message,
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.onSurface,
+        )
+        Spacer(modifier = Modifier.height(12.dp))
+        Card(
+            colors = CardDefaults.cardColors(containerColor = KhataThemeExtras.colors.paperSurfaceRaised),
+            shape = RoundedCornerShape(14.dp),
+            elevation = CardDefaults.cardElevation(0.dp),
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            Text(
+                text = stringResource(R.string.today_text_entry_placeholder),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(14.dp),
+            )
+        }
+        Spacer(modifier = Modifier.height(22.dp))
+        Button(
+            onClick = onOk,
+            modifier = Modifier.fillMaxWidth().height(52.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = accent),
+            shape = RoundedCornerShape(14.dp),
+        ) { Text("OK") }
     }
 }
 
