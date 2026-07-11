@@ -6,9 +6,11 @@ import android.media.AudioFormat
 import android.media.AudioRecord
 import android.media.AudioTrack
 import android.media.MediaRecorder
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
@@ -34,6 +36,9 @@ import java.util.concurrent.TimeUnit
  */
 class GeminiLiveClient(
     private val apiKey: String,
+    private val scope: CoroutineScope,
+    /** Bridge to Agent B (the on-device Ledger Steward): (functionName, args) -> result JSON. */
+    private val toolExecutor: suspend (name: String, args: JSONObject) -> JSONObject,
     private val primaryModel: String = "models/gemini-2.5-flash-native-audio-latest",
     private val fallbackModel: String = "models/gemini-3.1-flash-live-preview",
 ) {
@@ -141,10 +146,26 @@ class GeminiLiveClient(
                         "systemInstruction",
                         JSONObject().put("parts", JSONArray().put(JSONObject().put("text", systemInstruction))),
                     )
+                    put("tools", buildTools()) // Agent A can drive the ledger via Agent B's tools
                 },
             )
         }
         return setup.toString()
+    }
+
+    /** Tool schema advertised to the Planner. Execution is delegated to the Ledger Steward. */
+    private fun buildTools(): JSONArray {
+        val decls = """
+        [
+          {"name":"add_credit","description":"Add a credit (udhaar) to a customer's khata. If it is above the daily limit the Steward returns needs_confirmation; ask the shopkeeper, then call again with confirmed=true.","parameters":{"type":"object","properties":{"customer":{"type":"string"},"amount":{"type":"number"},"item":{"type":"string"},"confirmed":{"type":"boolean"}},"required":["customer","amount"]}},
+          {"name":"record_payment","description":"Record a payment a customer made against their credit. Overpayment returns needs_confirmation; confirm then retry with confirmed=true.","parameters":{"type":"object","properties":{"customer":{"type":"string"},"amount":{"type":"number"},"confirmed":{"type":"boolean"}},"required":["customer","amount"]}},
+          {"name":"record_sale","description":"Record a cash/walk-in sale of an item.","parameters":{"type":"object","properties":{"item":{"type":"string"},"qty":{"type":"number"},"amount":{"type":"number"}},"required":["item","amount"]}},
+          {"name":"delete_last_transaction","description":"Delete the most recent transaction, optionally scoped to one customer.","parameters":{"type":"object","properties":{"customer":{"type":"string"}}}},
+          {"name":"query_balance","description":"How much a customer currently owes.","parameters":{"type":"object","properties":{"customer":{"type":"string"}},"required":["customer"]}},
+          {"name":"query_today","description":"Today's totals: credit given, payments received, entry count.","parameters":{"type":"object","properties":{}}}
+        ]
+        """.trimIndent()
+        return JSONArray().put(JSONObject().put("functionDeclarations", JSONArray(decls)))
     }
 
     private fun handleServerMessage(text: String) {
@@ -153,6 +174,35 @@ class GeminiLiveClient(
         if (json.has("setupComplete")) {
             setupAcked = true
             if (_status.value == LiveStatus.Connecting) _status.value = LiveStatus.Idle
+            return
+        }
+
+        // AGENT A -> AGENT B: the Planner wants to run ledger tools. Hand each call to the Ledger
+        // Steward, then send its results (committed / conflict) back so the Planner can continue.
+        json.optJSONObject("toolCall")?.let { toolCall ->
+            val calls = toolCall.optJSONArray("functionCalls") ?: return
+            scope.launch {
+                val responses = JSONArray()
+                for (i in 0 until calls.length()) {
+                    val fc = calls.optJSONObject(i) ?: continue
+                    val id = fc.optString("id")
+                    val fname = fc.optString("name")
+                    val fargs = fc.optJSONObject("args") ?: JSONObject()
+                    val result = runCatching { toolExecutor(fname, fargs) }
+                        .getOrElse { JSONObject().put("status", "error").put("message", it.message ?: "failed") }
+                    android.util.Log.i("KhataLive", "toolCall $fname($fargs) -> $result")
+                    responses.put(
+                        JSONObject().apply {
+                            if (id.isNotEmpty()) put("id", id)
+                            put("name", fname)
+                            put("response", JSONObject().put("result", result))
+                        },
+                    )
+                }
+                webSocket?.send(
+                    JSONObject().put("toolResponse", JSONObject().put("functionResponses", responses)).toString(),
+                )
+            }
             return
         }
 
