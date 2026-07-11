@@ -54,6 +54,9 @@ class LiteRtInferenceEngine(
     /** True once a model with a working audio tower has actually been loaded. */
     private var audioSupported: Boolean = false
 
+    /** Public read for the integrator: is the native-audio path usable on the loaded model file? */
+    val audioAvailable: Boolean get() = audioSupported
+
     override suspend fun warmUp() {
         val order = linkedSetOf(preferredBackend, InferenceBackend.CPU)
             .filter { it != InferenceBackend.STUB }
