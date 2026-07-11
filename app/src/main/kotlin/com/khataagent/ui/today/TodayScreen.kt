@@ -151,15 +151,12 @@ fun TodayScreen(
         turnState = turnState,
         voiceEnabled = true,
         voiceListening = voiceListening,
-        // ONLINE + Gemini key: record audio -> Gemini's multimodal model (best at Hindi/mixed
-        // speech). Otherwise (offline, or online without a key): hold-to-talk on the on-device
-        // recognizer -> text -> routed brain (Gemma offline / Gemini text online).
-        onMicPress = { if (isOnline && cloudAvailable) viewModel.onMicPress() else startOfflineVoice() },
-        onMicRelease = { if (isOnline && cloudAvailable) viewModel.onMicRelease() else onDeviceVoice.stop() },
-        onCancelListening = {
-            if (isOnline && cloudAvailable) viewModel.onCancelListening()
-            else { voiceListening = false; onDeviceVoice.destroy() }
-        },
+        // Voice always -> speech-to-text -> the routed brain (Gemini online / Gemma offline),
+        // which commits exactly like typing. ONLINE: the system recognizer activity (reliable
+        // with a network). OFFLINE: the dedicated on-device recognizer (airplane-mode capable).
+        onMicPress = { if (isOnline) startVoiceRecognizer() else startOfflineVoice() },
+        onMicRelease = { if (!isOnline) onDeviceVoice.stop() },
+        onCancelListening = { if (!isOnline) { voiceListening = false; onDeviceVoice.destroy() } },
         onSubmitText = viewModel::onSubmitText,
         onAcceptDeferred = viewModel::onAcceptDeferred,
         onRejectDeferred = viewModel::onRejectDeferred,
