@@ -11,6 +11,15 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.KhataAgent">
+
+        <!-- Required for the LiteRT-LM GPU (OpenCL) delegate to dlopen the vendor driver — without
+             libOpenCL.so declared, OpenCL can't load and GPU silently drops to the broken OpenGL
+             path. Mirrors the AI Edge Gallery manifest. -->
+        <uses-native-library android:name="libvndksupport.so" android:required="false" />
+        <uses-native-library android:name="libOpenCL.so" android:required="false" />
+        <uses-native-library android:name="libcdsprpc.so" android:required="false" />
+        <uses-native-library android:name="libedgetpu_litert.so" android:required="false" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true"

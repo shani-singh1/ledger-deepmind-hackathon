@@ -39,6 +39,9 @@ class LiteRtInferenceEngine(
 
     private var engine: Engine? = null
 
+    /** Writable dir for the GPU's compiled OpenCL kernel cache — REQUIRED for GPU engine creation. */
+    private val cacheDir: String = java.io.File(context.cacheDir, "litertlm").apply { mkdirs() }.absolutePath
+
     override suspend fun warmUp() {
         val order = linkedSetOf(preferredBackend, InferenceBackend.CPU)
             .filter { it != InferenceBackend.STUB }
@@ -48,7 +51,21 @@ class LiteRtInferenceEngine(
         for (candidate in order) {
             try {
                 val t0 = System.currentTimeMillis()
-                val eng = Engine(EngineConfig(modelPath = modelPath, backend = toBackend(candidate)))
+                // Text-only: vision/audio backends MUST be null (exactly as the AI Edge Gallery does).
+                // Passing a non-null backend loads those towers and forces the GPU onto a broken
+                // multimodal/OpenGL path (CreateSharedMemoryManager UNIMPLEMENTED); null keeps the
+                // text tower on the OpenCL GPU delegate. cacheDir null = library default (our model
+                // is in the app's files dir, not /data/local/tmp).
+                val eng = Engine(
+                    EngineConfig(
+                        modelPath = modelPath,
+                        backend = toBackend(candidate),
+                        visionBackend = null,
+                        audioBackend = null,
+                        maxNumTokens = MAX_NUM_TOKENS,
+                        cacheDir = null,
+                    ),
+                )
                 runInterruptible(Dispatchers.Default) { eng.initialize() }
                 engine = eng
                 backend = candidate
@@ -116,6 +133,7 @@ class LiteRtInferenceEngine(
         const val DEFAULT_MODEL_PATH = "/sdcard/Download/gemma-4-E2B-it.litertlm"
         private const val TAG = "KhataEngine"
 
+        private const val MAX_NUM_TOKENS = 1280
         private const val DEFAULT_TOP_K = 40
         private const val DEFAULT_TOP_P = 0.95
         private const val DEFAULT_TEMPERATURE = 0.2
