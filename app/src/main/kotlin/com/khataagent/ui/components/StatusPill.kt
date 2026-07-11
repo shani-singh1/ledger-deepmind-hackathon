@@ -28,7 +28,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.khataagent.R
 import com.khataagent.core.AgentStatus
 import com.khataagent.ui.theme.KhataThemeExtras
 
@@ -40,9 +42,9 @@ import com.khataagent.ui.theme.KhataThemeExtras
 fun StatusPill(status: AgentStatus, modifier: Modifier = Modifier) {
     val extras = KhataThemeExtras.colors
     val (dotColor, label) = when (status) {
-        AgentStatus.ON_DEVICE -> extras.statusOnDevice to "on-device"
-        AgentStatus.OFFLINE -> extras.statusOffline to "offline"
-        AgentStatus.SYNCING -> extras.statusSyncing to "syncing"
+        AgentStatus.ON_DEVICE -> extras.statusOnDevice to stringResource(R.string.status_on_device)
+        AgentStatus.OFFLINE -> extras.statusOffline to stringResource(R.string.status_offline)
+        AgentStatus.SYNCING -> extras.statusSyncing to stringResource(R.string.status_syncing)
     }
     Row(
         modifier = modifier

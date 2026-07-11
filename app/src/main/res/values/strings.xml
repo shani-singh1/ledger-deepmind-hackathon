@@ -1,3 +1,66 @@
 <resources>
     <string name="app_name">KhataAgent</string>
+
+    <!-- Top bar / nav -->
+    <string name="nav_today">Today</string>
+    <string name="nav_log">Agent Log</string>
+    <string name="nav_insights">Insights</string>
+    <string name="cd_simulate_offline">Simulate going offline</string>
+    <string name="cd_simulate_online">Simulate going online</string>
+
+    <!-- Today screen -->
+    <string name="today_empty_state">No entries yet today — hold the mic to speak one in.</string>
+    <string name="today_total_credit">Credit</string>
+    <string name="today_total_payments">Payments</string>
+    <string name="today_total_entries">Entries</string>
+    <string name="today_hint_voice_and_type">Hold to speak, or type below</string>
+    <string name="today_hint_type_only">Type your entry below</string>
+    <string name="today_rejected_toast">Rejected — nothing was written to the khata.</string>
+    <string name="today_status_listening">Listening…</string>
+    <string name="today_status_inferring">Reading your entry on-device…</string>
+    <string name="today_status_retrying">Rechecking…</string>
+    <string name="today_status_validating">Checking the ledger…</string>
+    <string name="today_text_entry_placeholder">e.g. \"Ramesh ko 250 udhaar likho\"</string>
+    <string name="cd_send">Send</string>
+
+    <!-- Confirm sheet -->
+    <string name="confirm_title">The agent isn\'t sure</string>
+    <string name="confirm_kind_new_customer">New customer</string>
+    <string name="confirm_kind_ambiguous_customer">Ambiguous name</string>
+    <string name="confirm_kind_over_limit">Above usual limit</string>
+    <string name="confirm_kind_overpayment">Overpayment</string>
+    <string name="confirm_kind_duplicate">Possible duplicate</string>
+    <string name="confirm_kind_schema">Couldn\'t parse</string>
+    <string name="confirm_kind_clarification">Asked for help</string>
+    <string name="confirm_what_i_understood">WHAT I UNDERSTOOD</string>
+    <string name="confirm_reject">Reject</string>
+    <string name="confirm_accept">Accept</string>
+    <string name="confirm_show_raw_output">Show raw model output ▼</string>
+    <string name="confirm_hide_raw_output">Hide raw model output ▲</string>
+
+    <!-- Agent log -->
+    <string name="log_empty_state">No deferrals yet — the agent has been confident all day.</string>
+    <string name="log_resolution_open">Open</string>
+    <string name="log_resolution_committed">Committed</string>
+    <string name="log_resolution_rejected">Rejected</string>
+    <string name="log_raw_model_output">RAW MODEL OUTPUT</string>
+
+    <!-- Insights -->
+    <string name="insights_title">Ask the cloud agent</string>
+    <string name="insights_subtitle">Heavier analysis Gemma leaves for Gemini — weekly reconciliation, anomaly review, reorder planning.</string>
+    <string name="insights_chip_weekly">Weekly</string>
+    <string name="insights_chip_anomalies">Anomalies</string>
+    <string name="insights_chip_reorder">Reorder</string>
+    <string name="insights_offline_queue_default">Offline — requests will queue and sync automatically.</string>
+    <string name="insights_no_reports">No reports yet — ask the cloud agent above.</string>
+    <string name="insights_queued_title">Queued — will sync</string>
+
+    <!-- Status pill -->
+    <string name="status_on_device">on-device</string>
+    <string name="status_offline">offline</string>
+    <string name="status_syncing">syncing</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_title">Choose your language</string>
+    <string name="onboarding_subtitle">अपनी भाषा चुनें • ভাষা নির্বাচন করুন • మీ భాషను ఎంచుకోండి</string>
 </resources>

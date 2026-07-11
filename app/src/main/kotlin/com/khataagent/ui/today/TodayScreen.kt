@@ -34,7 +34,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.khataagent.R
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.khataagent.core.agent.ConfirmCard
@@ -175,7 +177,7 @@ fun TodayContent(
                 if (transactions.isEmpty()) {
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                         Text(
-                            text = "No entries yet today — hold the mic to speak one in.",
+                            text = stringResource(R.string.today_empty_state),
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
@@ -218,7 +220,9 @@ fun TodayContent(
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = if (voiceEnabled) "Hold to speak, or type below" else "Type your entry below",
+                    text = stringResource(
+                        if (voiceEnabled) R.string.today_hint_voice_and_type else R.string.today_hint_type_only,
+                    ),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -235,7 +239,7 @@ fun TodayContent(
         }
         if (turnState is TurnState.Rejected) {
             CommittedToast(
-                text = "Rejected — nothing was written to the khata.",
+                text = stringResource(R.string.today_rejected_toast),
                 modifier = Modifier.align(Alignment.TopCenter).padding(top = 12.dp),
                 isRejection = true,
             )
@@ -269,11 +273,11 @@ private fun DayTotalsHeader(dailyState: DailyState) {
                 .padding(vertical = 16.dp),
             horizontalArrangement = Arrangement.SpaceEvenly,
         ) {
-            TotalStat(label = "Credit", amount = dailyState.totalCredit, color = extras.credit)
+            TotalStat(label = stringResource(R.string.today_total_credit), amount = dailyState.totalCredit, color = extras.credit)
             VerticalRule()
-            TotalStat(label = "Payments", amount = dailyState.totalPayments, color = extras.payment)
+            TotalStat(label = stringResource(R.string.today_total_payments), amount = dailyState.totalPayments, color = extras.payment)
             VerticalRule()
-            CountStat(label = "Entries", count = dailyState.txnCount)
+            CountStat(label = stringResource(R.string.today_total_entries), count = dailyState.txnCount)
         }
     }
 }
@@ -328,10 +332,10 @@ private fun ProcessingBanner(turnState: TurnState) {
     val extras = KhataThemeExtras.colors
     data class Status(val text: String?, val spinner: Boolean, val error: Boolean)
     val status = when (turnState) {
-        is TurnState.Listening -> Status("Listening…", false, false)
-        is TurnState.Inferring -> Status("Reading your entry on-device…", true, false)
-        is TurnState.Retrying -> Status("Rechecking…", true, false)
-        is TurnState.Validating -> Status("Checking the ledger…", true, false)
+        is TurnState.Listening -> Status(stringResource(R.string.today_status_listening), false, false)
+        is TurnState.Inferring -> Status(stringResource(R.string.today_status_inferring), true, false)
+        is TurnState.Retrying -> Status(stringResource(R.string.today_status_retrying), true, false)
+        is TurnState.Validating -> Status(stringResource(R.string.today_status_validating), true, false)
         is TurnState.Errored -> Status(turnState.message, false, true)
         else -> Status(null, false, false)
     }
@@ -376,12 +380,12 @@ private fun TextEntryBar(enabled: Boolean, onSubmit: (String) -> Unit) {
         onValueChange = { text = it },
         enabled = enabled,
         singleLine = true,
-        placeholder = { Text("e.g. \"Ramesh ko 250 udhaar likho\"") },
+        placeholder = { Text(stringResource(R.string.today_text_entry_placeholder)) },
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Send),
         keyboardActions = KeyboardActions(onSend = { send() }),
         trailingIcon = {
             IconButton(onClick = send, enabled = enabled) {
-                Icon(Icons.AutoMirrored.Filled.Send, contentDescription = "Send", tint = MaterialTheme.colorScheme.primary)
+                Icon(Icons.AutoMirrored.Filled.Send, contentDescription = stringResource(R.string.cd_send), tint = MaterialTheme.colorScheme.primary)
             }
         },
         colors = OutlinedTextFieldDefaults.colors(

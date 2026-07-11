@@ -1,0 +1,57 @@
+<resources>
+    <string name="nav_today">ഇന്ന്</string>
+    <string name="nav_log">ഏജന്റ് ലോഗ്</string>
+    <string name="nav_insights">ഇൻസൈറ്റുകൾ</string>
+    <string name="cd_simulate_offline">ഓഫ്‌ലൈൻ ആണെന്ന് അനുകരിക്കുക</string>
+    <string name="cd_simulate_online">ഓൺലൈൻ ആണെന്ന് അനുകരിക്കുക</string>
+
+    <string name="today_empty_state">ഇന്ന് ഇതുവരെ എൻട്രികളൊന്നുമില്ല — സംസാരിക്കാൻ മൈക്ക് അമർത്തിപ്പിടിക്കുക.</string>
+    <string name="today_total_credit">കടം</string>
+    <string name="today_total_payments">പേയ്‌മെന്റുകൾ</string>
+    <string name="today_total_entries">എൻട്രികൾ</string>
+    <string name="today_hint_voice_and_type">സംസാരിക്കാൻ അമർത്തിപ്പിടിക്കുക, അല്ലെങ്കിൽ താഴെ ടൈപ്പ് ചെയ്യുക</string>
+    <string name="today_hint_type_only">നിങ്ങളുടെ എൻട്രി താഴെ ടൈപ്പ് ചെയ്യുക</string>
+    <string name="today_rejected_toast">നിരസിച്ചു — കണക്കിൽ ഒന്നും എഴുതിയിട്ടില്ല.</string>
+    <string name="today_status_listening">കേൾക്കുന്നു…</string>
+    <string name="today_status_inferring">ഉപകരണത്തിൽ തന്നെ നിങ്ങളുടെ എൻട്രി വായിക്കുന്നു…</string>
+    <string name="today_status_retrying">വീണ്ടും പരിശോധിക്കുന്നു…</string>
+    <string name="today_status_validating">കണക്ക് പരിശോധിക്കുന്നു…</string>
+    <string name="today_text_entry_placeholder">ഉദാഹരണം: \"രമേശിന് 250 കടം എഴുതുക\"</string>
+    <string name="cd_send">അയയ്ക്കുക</string>
+
+    <string name="confirm_title">ഏജന്റിന് ഉറപ്പില്ല</string>
+    <string name="confirm_kind_new_customer">പുതിയ ഉപഭോക്താവ്</string>
+    <string name="confirm_kind_ambiguous_customer">അവ്യക്തമായ പേര്</string>
+    <string name="confirm_kind_over_limit">പതിവ് പരിധിക്ക് മുകളിൽ</string>
+    <string name="confirm_kind_overpayment">അധിക പേയ്‌മെന്റ്</string>
+    <string name="confirm_kind_duplicate">ആവർത്തനം ആകാം</string>
+    <string name="confirm_kind_schema">മനസ്സിലായില്ല</string>
+    <string name="confirm_kind_clarification">വിശദീകരണം ചോദിച്ചു</string>
+    <string name="confirm_what_i_understood">ഞാൻ മനസ്സിലാക്കിയത്</string>
+    <string name="confirm_reject">നിരസിക്കുക</string>
+    <string name="confirm_accept">അംഗീകരിക്കുക</string>
+    <string name="confirm_show_raw_output">മോഡലിന്റെ യഥാർത്ഥ ഔട്ട്‌പുട്ട് കാണിക്കുക ▼</string>
+    <string name="confirm_hide_raw_output">മോഡലിന്റെ യഥാർത്ഥ ഔട്ട്‌പുട്ട് മറയ്ക്കുക ▲</string>
+
+    <string name="log_empty_state">ഇതുവരെ മാറ്റിവയ്ക്കലുകൾ ഇല്ല — ഏജന്റ് ദിവസം മുഴുവൻ ആത്മവിശ്വാസത്തോടെയായിരുന്നു.</string>
+    <string name="log_resolution_open">തുറന്നത്</string>
+    <string name="log_resolution_committed">രേഖപ്പെടുത്തി</string>
+    <string name="log_resolution_rejected">നിരസിച്ചു</string>
+    <string name="log_raw_model_output">മോഡലിന്റെ യഥാർത്ഥ ഔട്ട്‌പുട്ട്</string>
+
+    <string name="insights_title">ക്ലൗഡ് ഏജന്റിനോട് ചോദിക്കുക</string>
+    <string name="insights_subtitle">ഭാരിച്ച വിശകലനം Gemma, Gemini-ക്കായി വിടുന്നു — പ്രതിവാര പൊരുത്തപ്പെടുത്തൽ, അപാകത അവലോകനം, റീഓർഡർ ആസൂത്രണം.</string>
+    <string name="insights_chip_weekly">പ്രതിവാരം</string>
+    <string name="insights_chip_anomalies">അപാകതകൾ</string>
+    <string name="insights_chip_reorder">റീഓർഡർ</string>
+    <string name="insights_offline_queue_default">ഓഫ്‌ലൈൻ — അഭ്യർത്ഥനകൾ ക്യൂവിൽ നിന്ന് സ്വയമേവ സിങ്ക് ചെയ്യും.</string>
+    <string name="insights_no_reports">ഇതുവരെ റിപ്പോർട്ടുകൾ ഇല്ല — മുകളിൽ ക്ലൗഡ് ഏജന്റിനോട് ചോദിക്കുക.</string>
+    <string name="insights_queued_title">ക്യൂവിൽ — ഉടൻ സിങ്ക് ചെയ്യും</string>
+
+    <string name="status_on_device">ഓൺ-ഡിവൈസ്</string>
+    <string name="status_offline">ഓഫ്‌ലൈൻ</string>
+    <string name="status_syncing">സിങ്ക് ചെയ്യുന്നു</string>
+
+    <string name="onboarding_title">നിങ്ങളുടെ ഭാഷ തിരഞ്ഞെടുക്കുക</string>
+    <string name="onboarding_subtitle">നിങ്ങൾക്ക് ഇഷ്ടമുള്ള ഭാഷ തിരഞ്ഞെടുക്കുക</string>
+</resources>

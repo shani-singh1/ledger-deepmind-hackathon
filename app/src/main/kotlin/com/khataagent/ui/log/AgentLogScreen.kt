@@ -24,10 +24,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.khataagent.R
 import com.khataagent.core.data.LedgerRepository
 import com.khataagent.core.model.DeferralEntry
 import com.khataagent.fake.FakeLedgerRepository
@@ -57,7 +59,7 @@ private fun AgentLogContent(deferrals: List<DeferralEntry>, modifier: Modifier =
     if (deferrals.isEmpty()) {
         Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             Text(
-                text = "No deferrals yet — the agent has been confident all day.",
+                text = stringResource(R.string.log_empty_state),
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
@@ -79,9 +81,9 @@ private fun AgentLogContent(deferrals: List<DeferralEntry>, modifier: Modifier =
 private fun DeferralCard(entry: DeferralEntry) {
     val extras = KhataThemeExtras.colors
     val (resolutionLabel, resolutionColor) = when (entry.resolution) {
-        null -> "Open" to extras.statusSyncing
-        "committed" -> "Committed" to extras.payment
-        "rejected" -> "Rejected" to extras.credit
+        null -> stringResource(R.string.log_resolution_open) to extras.statusSyncing
+        "committed" -> stringResource(R.string.log_resolution_committed) to extras.payment
+        "rejected" -> stringResource(R.string.log_resolution_rejected) to extras.credit
         else -> entry.resolution to MaterialTheme.colorScheme.onSurfaceVariant
     }
     Card(
@@ -112,7 +114,7 @@ private fun DeferralCard(entry: DeferralEntry) {
             )
             Spacer(modifier = Modifier.height(10.dp))
             Text(
-                text = "RAW MODEL OUTPUT",
+                text = stringResource(R.string.log_raw_model_output),
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )

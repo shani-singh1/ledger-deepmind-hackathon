@@ -1,0 +1,57 @@
+<resources>
+    <string name="nav_today">आज</string>
+    <string name="nav_log">एजंट लॉग</string>
+    <string name="nav_insights">इनसाइट्स</string>
+    <string name="cd_simulate_offline">ऑफलाइन असल्याचे अनुकरण करा</string>
+    <string name="cd_simulate_online">ऑनलाइन असल्याचे अनुकरण करा</string>
+
+    <string name="today_empty_state">आज अजून कोणतीही नोंद नाही — बोलण्यासाठी माइक दाबून धरा.</string>
+    <string name="today_total_credit">उधारी</string>
+    <string name="today_total_payments">पेमेंट</string>
+    <string name="today_total_entries">नोंदी</string>
+    <string name="today_hint_voice_and_type">बोलण्यासाठी दाबून धरा, किंवा खाली टाइप करा</string>
+    <string name="today_hint_type_only">खाली तुमची नोंद टाइप करा</string>
+    <string name="today_rejected_toast">नाकारले — खात्यात काहीही लिहिले गेले नाही.</string>
+    <string name="today_status_listening">ऐकत आहे…</string>
+    <string name="today_status_inferring">डिव्हाइसवरच तुमची नोंद वाचत आहे…</string>
+    <string name="today_status_retrying">पुन्हा तपासत आहे…</string>
+    <string name="today_status_validating">खाते तपासत आहे…</string>
+    <string name="today_text_entry_placeholder">उदाहरण: \"रमेशला 250 उधार लिही\"</string>
+    <string name="cd_send">पाठवा</string>
+
+    <string name="confirm_title">एजंटला खात्री नाही</string>
+    <string name="confirm_kind_new_customer">नवीन ग्राहक</string>
+    <string name="confirm_kind_ambiguous_customer">अस्पष्ट नाव</string>
+    <string name="confirm_kind_over_limit">नेहमीच्या मर्यादेपेक्षा जास्त</string>
+    <string name="confirm_kind_overpayment">जास्त पेमेंट</string>
+    <string name="confirm_kind_duplicate">संभाव्य डुप्लिकेट</string>
+    <string name="confirm_kind_schema">समजले नाही</string>
+    <string name="confirm_kind_clarification">स्पष्टीकरण विचारले</string>
+    <string name="confirm_what_i_understood">मला हे समजले</string>
+    <string name="confirm_reject">नाकारा</string>
+    <string name="confirm_accept">स्वीकारा</string>
+    <string name="confirm_show_raw_output">मॉडेलचे मूळ आउटपुट दाखवा ▼</string>
+    <string name="confirm_hide_raw_output">मॉडेलचे मूळ आउटपुट लपवा ▲</string>
+
+    <string name="log_empty_state">अजून कोणतेही स्थगन नाही — एजंट दिवसभर आत्मविश्वासू राहिला आहे.</string>
+    <string name="log_resolution_open">उघडे</string>
+    <string name="log_resolution_committed">नोंदवले</string>
+    <string name="log_resolution_rejected">नाकारले</string>
+    <string name="log_raw_model_output">मॉडेलचे मूळ आउटपुट</string>
+
+    <string name="insights_title">क्लाउड एजंटला विचारा</string>
+    <string name="insights_subtitle">जड विश्लेषण Gemma, Gemini साठी सोडते — साप्ताहिक जुळणी, विसंगती आढावा, पुनर्ऑर्डर नियोजन.</string>
+    <string name="insights_chip_weekly">साप्ताहिक</string>
+    <string name="insights_chip_anomalies">विसंगती</string>
+    <string name="insights_chip_reorder">पुनर्ऑर्डर</string>
+    <string name="insights_offline_queue_default">ऑफलाइन — विनंत्या रांगेत राहतील आणि आपोआप सिंक होतील.</string>
+    <string name="insights_no_reports">अजून अहवाल नाहीत — वर क्लाउड एजंटला विचारा.</string>
+    <string name="insights_queued_title">रांगेत — लवकरच सिंक होईल</string>
+
+    <string name="status_on_device">ऑन-डिव्हाइस</string>
+    <string name="status_offline">ऑफलाइन</string>
+    <string name="status_syncing">सिंक होत आहे</string>
+
+    <string name="onboarding_title">तुमची भाषा निवडा</string>
+    <string name="onboarding_subtitle">तुमची आवडती भाषा निवडा</string>
+</resources>

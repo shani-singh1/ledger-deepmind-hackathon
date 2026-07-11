@@ -35,10 +35,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.khataagent.R
 import com.khataagent.core.data.LedgerRepository
 import com.khataagent.core.escalate.ConnectivityMonitor
 import com.khataagent.core.escalate.EscalationClient
@@ -107,39 +109,39 @@ private fun InsightsContent(
     ) {
         item {
             Text(
-                text = "Ask the cloud agent",
+                text = stringResource(R.string.insights_title),
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface,
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = "Heavier analysis Gemma leaves for Gemini — weekly reconciliation, anomaly review, reorder planning.",
+                text = stringResource(R.string.insights_subtitle),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
             Spacer(modifier = Modifier.height(10.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                RequestChip("Weekly", Icons.Filled.QueryStats, pendingKind == ReportKind.WEEKLY_SUMMARY) {
+                RequestChip(stringResource(R.string.insights_chip_weekly), Icons.Filled.QueryStats, pendingKind == ReportKind.WEEKLY_SUMMARY) {
                     onRequest(ReportKind.WEEKLY_SUMMARY)
                 }
-                RequestChip("Anomalies", Icons.Filled.Warning, pendingKind == ReportKind.ANOMALY_REVIEW) {
+                RequestChip(stringResource(R.string.insights_chip_anomalies), Icons.Filled.Warning, pendingKind == ReportKind.ANOMALY_REVIEW) {
                     onRequest(ReportKind.ANOMALY_REVIEW)
                 }
-                RequestChip("Reorder", Icons.Filled.Widgets, pendingKind == ReportKind.REORDER_SUGGESTIONS) {
+                RequestChip(stringResource(R.string.insights_chip_reorder), Icons.Filled.Widgets, pendingKind == ReportKind.REORDER_SUGGESTIONS) {
                     onRequest(ReportKind.REORDER_SUGGESTIONS)
                 }
             }
         }
 
         if (!isOnline || queuedMessage != null) {
-            item { QueuedBanner(message = queuedMessage ?: "Offline — requests will queue and sync automatically.") }
+            item { QueuedBanner(message = queuedMessage ?: stringResource(R.string.insights_offline_queue_default)) }
         }
 
         if (reports.isEmpty()) {
             item {
                 Box(modifier = Modifier.fillMaxWidth().padding(vertical = 40.dp), contentAlignment = Alignment.Center) {
                     Text(
-                        text = "No reports yet — ask the cloud agent above.",
+                        text = stringResource(R.string.insights_no_reports),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
@@ -186,7 +188,7 @@ private fun QueuedBanner(message: String) {
             }
             Spacer(modifier = Modifier.size(12.dp))
             Column {
-                Text("Queued — will sync", style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.onPrimaryContainer)
+                Text(stringResource(R.string.insights_queued_title), style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.onPrimaryContainer)
                 Text(message, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onPrimaryContainer)
             }
         }

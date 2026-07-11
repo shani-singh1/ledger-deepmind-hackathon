@@ -1,0 +1,57 @@
+<resources>
+    <string name="nav_today">இன்று</string>
+    <string name="nav_log">ஏஜென்ட் பதிவு</string>
+    <string name="nav_insights">நுண்ணறிவுகள்</string>
+    <string name="cd_simulate_offline">ஆஃப்லைனாக மாற்றி காட்டு</string>
+    <string name="cd_simulate_online">ஆன்லைனாக மாற்றி காட்டு</string>
+
+    <string name="today_empty_state">இன்று இதுவரை பதிவுகள் இல்லை — பேச மைக்கை அழுத்திப் பிடிக்கவும்.</string>
+    <string name="today_total_credit">கடன்</string>
+    <string name="today_total_payments">பணம் செலுத்தியது</string>
+    <string name="today_total_entries">பதிவுகள்</string>
+    <string name="today_hint_voice_and_type">பேச அழுத்திப் பிடிக்கவும், அல்லது கீழே தட்டச்சு செய்யவும்</string>
+    <string name="today_hint_type_only">உங்கள் பதிவை கீழே தட்டச்சு செய்யவும்</string>
+    <string name="today_rejected_toast">நிராகரிக்கப்பட்டது — கணக்கில் எதுவும் எழுதப்படவில்லை.</string>
+    <string name="today_status_listening">கேட்கிறேன்…</string>
+    <string name="today_status_inferring">சாதனத்திலேயே உங்கள் பதிவைப் படிக்கிறது…</string>
+    <string name="today_status_retrying">மீண்டும் சரிபார்க்கிறது…</string>
+    <string name="today_status_validating">கணக்கைச் சரிபார்க்கிறது…</string>
+    <string name="today_text_entry_placeholder">உதாரணம்: \"ரமேஷுக்கு 250 கடன் எழுது\"</string>
+    <string name="cd_send">அனுப்பு</string>
+
+    <string name="confirm_title">ஏஜென்டுக்கு உறுதியில்லை</string>
+    <string name="confirm_kind_new_customer">புதிய வாடிக்கையாளர்</string>
+    <string name="confirm_kind_ambiguous_customer">தெளிவற்ற பெயர்</string>
+    <string name="confirm_kind_over_limit">வழக்கமான வரம்பை விட அதிகம்</string>
+    <string name="confirm_kind_overpayment">அதிக பணம் செலுத்தியது</string>
+    <string name="confirm_kind_duplicate">மறுநகல் போலிருக்கிறது</string>
+    <string name="confirm_kind_schema">புரியவில்லை</string>
+    <string name="confirm_kind_clarification">விளக்கம் கேட்டது</string>
+    <string name="confirm_what_i_understood">நான் புரிந்துகொண்டது</string>
+    <string name="confirm_reject">நிராகரி</string>
+    <string name="confirm_accept">ஏற்றுக்கொள்</string>
+    <string name="confirm_show_raw_output">மாடலின் மூல வெளியீட்டைக் காட்டு ▼</string>
+    <string name="confirm_hide_raw_output">மாடலின் மூல வெளியீட்டை மறை ▲</string>
+
+    <string name="log_empty_state">இதுவரை ஒத்திவைப்புகள் இல்லை — ஏஜென்ட் நாள் முழுவதும் நம்பிக்கையுடன் இருந்தது.</string>
+    <string name="log_resolution_open">திறந்துள்ளது</string>
+    <string name="log_resolution_committed">பதிவு செய்யப்பட்டது</string>
+    <string name="log_resolution_rejected">நிராகரிக்கப்பட்டது</string>
+    <string name="log_raw_model_output">மாடலின் மூல வெளியீடு</string>
+
+    <string name="insights_title">கிளவுட் ஏஜென்டிடம் கேளுங்கள்</string>
+    <string name="insights_subtitle">கனமான பகுப்பாய்வை Gemma, Gemini-க்கு விட்டுவிடுகிறது — வாராந்திர சமன்பாடு, முரண்பாடு மதிப்பாய்வு, மறு-ஆர்டர் திட்டமிடல்.</string>
+    <string name="insights_chip_weekly">வாராந்திரம்</string>
+    <string name="insights_chip_anomalies">முரண்பாடுகள்</string>
+    <string name="insights_chip_reorder">மறு-ஆர்டர்</string>
+    <string name="insights_offline_queue_default">ஆஃப்லைன் — கோரிக்கைகள் வரிசையில் இருந்து தானாக ஒத்திசைக்கப்படும்.</string>
+    <string name="insights_no_reports">இதுவரை அறிக்கைகள் இல்லை — மேலே கிளவுட் ஏஜென்டிடம் கேளுங்கள்.</string>
+    <string name="insights_queued_title">வரிசையில் — விரைவில் ஒத்திசைக்கப்படும்</string>
+
+    <string name="status_on_device">சாதனத்திலேயே</string>
+    <string name="status_offline">ஆஃப்லைன்</string>
+    <string name="status_syncing">ஒத்திசைக்கிறது</string>
+
+    <string name="onboarding_title">உங்கள் மொழியைத் தேர்ந்தெடுக்கவும்</string>
+    <string name="onboarding_subtitle">உங்களுக்கு விருப்பமான மொழியைத் தேர்ந்தெடுக்கவும்</string>
+</resources>

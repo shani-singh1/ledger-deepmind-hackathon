@@ -1,0 +1,57 @@
+<resources>
+    <string name="nav_today">আজ</string>
+    <string name="nav_log">এজেন্ট লগ</string>
+    <string name="nav_insights">ইনসাইটস</string>
+    <string name="cd_simulate_offline">অফলাইন হওয়ার সিমুলেশন করুন</string>
+    <string name="cd_simulate_online">অনলাইন হওয়ার সিমুলেশন করুন</string>
+
+    <string name="today_empty_state">আজ এখনও কোনো এন্ট্রি নেই — বলার জন্য মাইক চেপে ধরুন।</string>
+    <string name="today_total_credit">বাকি</string>
+    <string name="today_total_payments">পেমেন্ট</string>
+    <string name="today_total_entries">এন্ট্রি</string>
+    <string name="today_hint_voice_and_type">বলতে চেপে ধরে রাখুন, অথবা নিচে টাইপ করুন</string>
+    <string name="today_hint_type_only">নিচে আপনার এন্ট্রি টাইপ করুন</string>
+    <string name="today_rejected_toast">প্রত্যাখ্যাত — খাতায় কিছু লেখা হয়নি।</string>
+    <string name="today_status_listening">শুনছি…</string>
+    <string name="today_status_inferring">ডিভাইসেই আপনার এন্ট্রি পড়া হচ্ছে…</string>
+    <string name="today_status_retrying">আবার যাচাই করা হচ্ছে…</string>
+    <string name="today_status_validating">খাতা যাচাই করা হচ্ছে…</string>
+    <string name="today_text_entry_placeholder">উদাহরণ: \"রমেশকে ২৫০ বাকি লেখো\"</string>
+    <string name="cd_send">পাঠান</string>
+
+    <string name="confirm_title">এজেন্ট নিশ্চিত নয়</string>
+    <string name="confirm_kind_new_customer">নতুন গ্রাহক</string>
+    <string name="confirm_kind_ambiguous_customer">অস্পষ্ট নাম</string>
+    <string name="confirm_kind_over_limit">স্বাভাবিক সীমার বেশি</string>
+    <string name="confirm_kind_overpayment">অতিরিক্ত পেমেন্ট</string>
+    <string name="confirm_kind_duplicate">সম্ভাব্য ডুপ্লিকেট</string>
+    <string name="confirm_kind_schema">বুঝতে পারেনি</string>
+    <string name="confirm_kind_clarification">স্পষ্টীকরণ চেয়েছে</string>
+    <string name="confirm_what_i_understood">আমি যা বুঝেছি</string>
+    <string name="confirm_reject">প্রত্যাখ্যান করুন</string>
+    <string name="confirm_accept">গ্রহণ করুন</string>
+    <string name="confirm_show_raw_output">মডেলের আসল আউটপুট দেখুন ▼</string>
+    <string name="confirm_hide_raw_output">মডেলের আসল আউটপুট লুকান ▲</string>
+
+    <string name="log_empty_state">এখনও কোনো স্থগিত এন্ট্রি নেই — এজেন্ট সারাদিন নিশ্চিত ছিল।</string>
+    <string name="log_resolution_open">খোলা</string>
+    <string name="log_resolution_committed">নথিভুক্ত</string>
+    <string name="log_resolution_rejected">প্রত্যাখ্যাত</string>
+    <string name="log_raw_model_output">মডেলের আসল আউটপুট</string>
+
+    <string name="insights_title">ক্লাউড এজেন্টকে জিজ্ঞাসা করুন</string>
+    <string name="insights_subtitle">ভারী বিশ্লেষণ Gemma, Gemini-এর জন্য রেখে দেয় — সাপ্তাহিক মিলকরণ, অসঙ্গতি পর্যালোচনা, পুনরায় অর্ডার পরিকল্পনা।</string>
+    <string name="insights_chip_weekly">সাপ্তাহিক</string>
+    <string name="insights_chip_anomalies">অসঙ্গতি</string>
+    <string name="insights_chip_reorder">পুনরায় অর্ডার</string>
+    <string name="insights_offline_queue_default">অফলাইন — অনুরোধগুলো সারিবদ্ধ থাকবে এবং স্বয়ংক্রিয়ভাবে সিঙ্ক হবে।</string>
+    <string name="insights_no_reports">এখনও কোনো রিপোর্ট নেই — উপরে ক্লাউড এজেন্টকে জিজ্ঞাসা করুন।</string>
+    <string name="insights_queued_title">সারিবদ্ধ — শীঘ্রই সিঙ্ক হবে</string>
+
+    <string name="status_on_device">অন-ডিভাইস</string>
+    <string name="status_offline">অফলাইন</string>
+    <string name="status_syncing">সিঙ্ক হচ্ছে</string>
+
+    <string name="onboarding_title">আপনার ভাষা নির্বাচন করুন</string>
+    <string name="onboarding_subtitle">আপনার পছন্দের ভাষা বেছে নিন</string>
+</resources>

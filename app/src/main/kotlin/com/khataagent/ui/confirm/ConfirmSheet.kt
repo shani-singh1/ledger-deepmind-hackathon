@@ -44,9 +44,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.khataagent.R
 import com.khataagent.core.agent.ConfirmCard
 import com.khataagent.core.agent.DeferKind
 import com.khataagent.core.tool.ToolCall
@@ -80,15 +82,16 @@ fun ConfirmSheet(
     }
 }
 
+@Composable
 private fun deferKindMeta(kind: DeferKind): Triple<String, androidx.compose.ui.graphics.vector.ImageVector, String> =
     when (kind) {
-        DeferKind.NEW_CUSTOMER -> Triple("New customer", Icons.Filled.PersonAddAlt, "PERSON")
-        DeferKind.AMBIGUOUS_CUSTOMER -> Triple("Ambiguous name", Icons.Filled.SwapHoriz, "AMBIGUOUS")
-        DeferKind.OVER_LIMIT -> Triple("Above usual limit", Icons.Filled.PriorityHigh, "LIMIT")
-        DeferKind.OVERPAYMENT -> Triple("Overpayment", Icons.Filled.PriorityHigh, "OVERPAY")
-        DeferKind.DUPLICATE -> Triple("Possible duplicate", Icons.Filled.Replay, "DUPLICATE")
-        DeferKind.SCHEMA -> Triple("Couldn't parse", Icons.AutoMirrored.Filled.Rule, "SCHEMA")
-        DeferKind.CLARIFICATION -> Triple("Asked for help", Icons.AutoMirrored.Filled.HelpOutline, "ASK")
+        DeferKind.NEW_CUSTOMER -> Triple(stringResource(R.string.confirm_kind_new_customer), Icons.Filled.PersonAddAlt, "PERSON")
+        DeferKind.AMBIGUOUS_CUSTOMER -> Triple(stringResource(R.string.confirm_kind_ambiguous_customer), Icons.Filled.SwapHoriz, "AMBIGUOUS")
+        DeferKind.OVER_LIMIT -> Triple(stringResource(R.string.confirm_kind_over_limit), Icons.Filled.PriorityHigh, "LIMIT")
+        DeferKind.OVERPAYMENT -> Triple(stringResource(R.string.confirm_kind_overpayment), Icons.Filled.PriorityHigh, "OVERPAY")
+        DeferKind.DUPLICATE -> Triple(stringResource(R.string.confirm_kind_duplicate), Icons.Filled.Replay, "DUPLICATE")
+        DeferKind.SCHEMA -> Triple(stringResource(R.string.confirm_kind_schema), Icons.AutoMirrored.Filled.Rule, "SCHEMA")
+        DeferKind.CLARIFICATION -> Triple(stringResource(R.string.confirm_kind_clarification), Icons.AutoMirrored.Filled.HelpOutline, "ASK")
     }
 
 @Composable
@@ -119,7 +122,7 @@ fun ConfirmSheetContent(
             Spacer(modifier = Modifier.size(10.dp))
             Column {
                 Text(
-                    text = "The agent isn't sure",
+                    text = stringResource(R.string.confirm_title),
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -142,7 +145,7 @@ fun ConfirmSheetContent(
         ) {
             Column(modifier = Modifier.padding(16.dp)) {
                 Text(
-                    text = "WHAT I UNDERSTOOD",
+                    text = stringResource(R.string.confirm_what_i_understood),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     fontWeight = FontWeight.SemiBold,
@@ -191,7 +194,7 @@ fun ConfirmSheetContent(
             ) {
                 Icon(Icons.Filled.Close, contentDescription = null, modifier = Modifier.size(18.dp))
                 Spacer(modifier = Modifier.size(6.dp))
-                Text("Reject")
+                Text(stringResource(R.string.confirm_reject))
             }
             Button(
                 onClick = onAccept,
@@ -201,7 +204,7 @@ fun ConfirmSheetContent(
             ) {
                 Icon(Icons.Filled.Check, contentDescription = null, modifier = Modifier.size(18.dp))
                 Spacer(modifier = Modifier.size(6.dp))
-                Text("Accept")
+                Text(stringResource(R.string.confirm_accept))
             }
         }
     }
@@ -219,7 +222,7 @@ private fun RawOutputDisclosure(rawOutput: String) {
     var expanded by remember { mutableStateOf(false) }
     Column {
         Text(
-            text = if (expanded) "Hide raw model output ▲" else "Show raw model output ▼",
+            text = if (expanded) stringResource(R.string.confirm_hide_raw_output) else stringResource(R.string.confirm_show_raw_output),
             style = MaterialTheme.typography.labelMedium,
             color = MaterialTheme.colorScheme.primary,
             modifier = Modifier

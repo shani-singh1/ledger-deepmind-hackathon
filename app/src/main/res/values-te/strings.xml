@@ -1,0 +1,57 @@
+<resources>
+    <string name="nav_today">ఈరోజు</string>
+    <string name="nav_log">ఏజెంట్ లాగ్</string>
+    <string name="nav_insights">ఇన్‌సైట్స్</string>
+    <string name="cd_simulate_offline">ఆఫ్‌లైన్‌గా అనుకరించండి</string>
+    <string name="cd_simulate_online">ఆన్‌లైన్‌గా అనుకరించండి</string>
+
+    <string name="today_empty_state">ఈరోజు ఇంకా ఎంట్రీలు లేవు — మాట్లాడటానికి మైక్‌ను నొక్కి ఉంచండి.</string>
+    <string name="today_total_credit">అరువు</string>
+    <string name="today_total_payments">చెల్లింపులు</string>
+    <string name="today_total_entries">ఎంట్రీలు</string>
+    <string name="today_hint_voice_and_type">మాట్లాడటానికి నొక్కి ఉంచండి, లేదా కింద టైప్ చేయండి</string>
+    <string name="today_hint_type_only">మీ ఎంట్రీని కింద టైప్ చేయండి</string>
+    <string name="today_rejected_toast">తిరస్కరించబడింది — ఖాతాలో ఏమీ రాయబడలేదు.</string>
+    <string name="today_status_listening">వింటున్నాను…</string>
+    <string name="today_status_inferring">పరికరంలోనే మీ ఎంట్రీని చదువుతోంది…</string>
+    <string name="today_status_retrying">మళ్ళీ తనిఖీ చేస్తోంది…</string>
+    <string name="today_status_validating">ఖాతాను తనిఖీ చేస్తోంది…</string>
+    <string name="today_text_entry_placeholder">ఉదాహరణ: \"రమేష్‌కి 250 అరువు రాయి\"</string>
+    <string name="cd_send">పంపండి</string>
+
+    <string name="confirm_title">ఏజెంట్‌కు నిర్ధారణ లేదు</string>
+    <string name="confirm_kind_new_customer">కొత్త కస్టమర్</string>
+    <string name="confirm_kind_ambiguous_customer">అస్పష్టమైన పేరు</string>
+    <string name="confirm_kind_over_limit">సాధారణ పరిమితి కంటే ఎక్కువ</string>
+    <string name="confirm_kind_overpayment">అధిక చెల్లింపు</string>
+    <string name="confirm_kind_duplicate">నకిలీ కావొచ్చు</string>
+    <string name="confirm_kind_schema">అర్థం కాలేదు</string>
+    <string name="confirm_kind_clarification">వివరణ అడిగింది</string>
+    <string name="confirm_what_i_understood">నేను అర్థం చేసుకున్నది</string>
+    <string name="confirm_reject">తిరస్కరించండి</string>
+    <string name="confirm_accept">ఆమోదించండి</string>
+    <string name="confirm_show_raw_output">మోడల్ అసలు అవుట్‌పుట్ చూపించు ▼</string>
+    <string name="confirm_hide_raw_output">మోడల్ అసలు అవుట్‌పుట్ దాచు ▲</string>
+
+    <string name="log_empty_state">ఇంకా వాయిదాలు లేవు — ఏజెంట్ రోజంతా నమ్మకంగా ఉంది.</string>
+    <string name="log_resolution_open">తెరిచి ఉంది</string>
+    <string name="log_resolution_committed">నమోదైంది</string>
+    <string name="log_resolution_rejected">తిరస్కరించబడింది</string>
+    <string name="log_raw_model_output">మోడల్ అసలు అవుట్‌పుట్</string>
+
+    <string name="insights_title">క్లౌడ్ ఏజెంట్‌ను అడగండి</string>
+    <string name="insights_subtitle">భారీ విశ్లేషణను Gemma, Gemini కోసం వదిలిపెడుతుంది — వారపు సమన్వయం, అసాధారణతల సమీక్ష, రీఆర్డర్ ప్రణాళిక.</string>
+    <string name="insights_chip_weekly">వారపు</string>
+    <string name="insights_chip_anomalies">అసాధారణతలు</string>
+    <string name="insights_chip_reorder">రీఆర్డర్</string>
+    <string name="insights_offline_queue_default">ఆఫ్‌లైన్ — అభ్యర్థనలు వరుసలో ఉండి, స్వయంచాలకంగా సింక్ అవుతాయి.</string>
+    <string name="insights_no_reports">ఇంకా నివేదికలు లేవు — పైన క్లౌడ్ ఏజెంట్‌ను అడగండి.</string>
+    <string name="insights_queued_title">క్యూలో ఉంది — త్వరలో సింక్ అవుతుంది</string>
+
+    <string name="status_on_device">ఆన్-డివైస్</string>
+    <string name="status_offline">ఆఫ్‌లైన్</string>
+    <string name="status_syncing">సింక్ అవుతోంది</string>
+
+    <string name="onboarding_title">మీ భాషను ఎంచుకోండి</string>
+    <string name="onboarding_subtitle">మీకు నచ్చిన భాషను ఎంచుకోండి</string>
+</resources>
