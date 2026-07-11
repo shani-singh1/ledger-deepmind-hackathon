@@ -23,18 +23,23 @@ class OnDeviceVoice(private val context: Context) {
 
     private var recognizer: SpeechRecognizer? = null
 
-    /** True when the device has an on-device recognition model ready (offline-capable). */
-    fun isAvailable(): Boolean =
-        Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
+    /** Prefer the offline on-device engine if its language pack is installed, else the standard
+     *  recognizer (which uses Google's online recognition when connected — reliable everywhere). */
+    private val useOnDevice: Boolean
+        get() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
             SpeechRecognizer.isOnDeviceRecognitionAvailable(context)
+
+    fun isAvailable(): Boolean = SpeechRecognizer.isRecognitionAvailable(context)
 
     fun start(languageTag: String?, onResult: (String) -> Unit, onError: (String) -> Unit) {
         destroy()
         if (!isAvailable()) {
-            onError("On-device voice isn't ready — type instead.")
+            onError("Voice isn't available — type instead.")
             return
         }
-        val rec = SpeechRecognizer.createOnDeviceSpeechRecognizer(context)
+        // Standard recognizer = best available (online when connected, offline if a pack exists).
+        // The on-device-only variant fails hard when its language pack isn't downloaded.
+        val rec = SpeechRecognizer.createSpeechRecognizer(context)
         recognizer = rec
         rec.setRecognitionListener(object : RecognitionListener {
             override fun onResults(results: Bundle) {
