@@ -134,13 +134,20 @@ fun TodayScreen(
         }
         runCatching { speechLauncher.launch(intent) }
     }
-    val startOfflineVoice: () -> Unit = {
+    val startInAppVoice: () -> Unit = {
         if (onDeviceVoice.isAvailable()) {
             voiceListening = true
             onDeviceVoice.start(
                 languageTag = Locale.getDefault().toLanguageTag(),
-                onResult = { voiceListening = false; viewModel.onSubmitText(it) },
-                onError = { voiceListening = false },
+                onResult = { text ->
+                    android.util.Log.i("KhataVoice", "onDevice result=$text")
+                    voiceListening = false
+                    viewModel.onSubmitText(text)
+                },
+                onError = {
+                    android.util.Log.i("KhataVoice", "onDevice error=$it")
+                    voiceListening = false
+                },
             )
         } else {
             startVoiceRecognizer()
@@ -156,9 +163,11 @@ fun TodayScreen(
         // Voice always -> speech-to-text -> the routed brain (Gemini online / Gemma offline),
         // which commits exactly like typing. ONLINE: the system recognizer activity (reliable
         // with a network). OFFLINE: the dedicated on-device recognizer (airplane-mode capable).
-        onMicPress = { if (isOnline) startVoiceRecognizer() else startOfflineVoice() },
-        onMicRelease = { if (!isOnline) onDeviceVoice.stop() },
-        onCancelListening = { if (!isOnline) { voiceListening = false; onDeviceVoice.destroy() } },
+        // Hold-to-talk via the in-app on-device recognizer (works online AND offline now that mic
+        // permission is granted); its listener fires the transcript directly -> commits like typing.
+        onMicPress = { startInAppVoice() },
+        onMicRelease = { onDeviceVoice.stop() },
+        onCancelListening = { voiceListening = false; onDeviceVoice.destroy() },
         onSubmitText = viewModel::onSubmitText,
         onAcceptDeferred = viewModel::onAcceptDeferred,
         onRejectDeferred = viewModel::onRejectDeferred,
