@@ -323,8 +323,10 @@ class GeminiLiveClient(
         ).coerceAtLeast(PLAYBACK_SAMPLE_RATE / 2)
         val track = AudioTrack.Builder()
             .setAudioAttributes(
+                // USAGE_MEDIA -> the phone's LOUD SPEAKER (not the earpiece). VOICE_COMMUNICATION
+                // routes to the earpiece and forces call-audio processing (quiet, "slow" sounding).
                 AudioAttributes.Builder()
-                    .setUsage(AudioAttributes.USAGE_VOICE_COMMUNICATION)
+                    .setUsage(AudioAttributes.USAGE_MEDIA)
                     .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
                     .build(),
             )
