@@ -112,6 +112,7 @@ fun TodayScreen(
         val spoken = result.data
             ?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
             ?.firstOrNull()
+        android.util.Log.i("KhataVoice", "speech result code=${result.resultCode} text=$spoken")
         if (result.resultCode == Activity.RESULT_OK && !spoken.isNullOrBlank()) {
             viewModel.onSubmitText(spoken)
         }
@@ -127,7 +128,8 @@ fun TodayScreen(
         val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
             putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
             putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault().toLanguageTag())
-            putExtra(RecognizerIntent.EXTRA_PREFER_OFFLINE, true)
+            // NOTE: do NOT force EXTRA_PREFER_OFFLINE here — it makes the online recognizer fail
+            // when no offline pack is installed. Let the system pick the best available engine.
             putExtra(RecognizerIntent.EXTRA_PROMPT, "Bolo… speak your entry")
         }
         runCatching { speechLauncher.launch(intent) }
