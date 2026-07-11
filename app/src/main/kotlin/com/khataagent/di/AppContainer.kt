@@ -40,7 +40,14 @@ class AppContainer(context: Context, scope: CoroutineScope) {
     private val stateBlockBuilder = provideStateBlockBuilder(repository)
     private val validator = KhataValidator()
 
-    private val liteRt = LiteRtInferenceEngine(appContext)
+    // Android 13+ scoped storage blocks reading /sdcard/Download directly, so the model lives in
+    // this app's own external files dir (no permission needed). Push it with:
+    //   adb push gemma-4-E2B-it.litertlm /sdcard/Android/data/com.khataagent/files/
+    private val modelFile = java.io.File(
+        appContext.getExternalFilesDir(null),
+        "gemma-4-E2B-it.litertlm",
+    )
+    private val liteRt = LiteRtInferenceEngine(appContext, modelFile.absolutePath)
     private val engine = ResilientInferenceEngine(primary = liteRt, fallback = StubInferenceEngine())
 
     val orchestrator = AgentOrchestrator(

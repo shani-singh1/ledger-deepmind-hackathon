@@ -55,9 +55,13 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Send
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.input.ImeAction
@@ -145,7 +149,7 @@ fun TodayContent(
                     }
                 } else {
                     LazyColumn(
-                        contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 140.dp),
+                        contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 240.dp),
                         verticalArrangement = Arrangement.spacedBy(10.dp),
                     ) {
                         items(transactions, key = { it.id }) { txn ->
@@ -158,28 +162,35 @@ fun TodayContent(
             }
         }
 
-        Column(
+        Surface(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .padding(bottom = 22.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
+                .fillMaxWidth(),
+            color = MaterialTheme.colorScheme.background,
+            shadowElevation = 10.dp,
         ) {
-            TurnStatusHint(turnState)
-            Spacer(modifier = Modifier.height(6.dp))
-            MicButton(
-                isListening = isListening,
-                isBusy = isBusy,
-                onPressStart = onMicPress,
-                onPressEnd = onMicRelease,
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = if (voiceEnabled) "Hold to speak, or type below" else "Type an entry below",
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            TextEntryBar(enabled = !isBusy, onSubmit = onSubmitText)
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 10.dp, bottom = 18.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                ProcessingBanner(turnState)
+                MicButton(
+                    isListening = isListening,
+                    isBusy = isBusy,
+                    onPressStart = onMicPress,
+                    onPressEnd = onMicRelease,
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = if (voiceEnabled) "Hold to speak, or type below" else "Type your entry below",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                TextEntryBar(enabled = !isBusy, onSubmit = onSubmitText)
+            }
         }
 
         if (turnState is TurnState.Committed) {
@@ -277,20 +288,42 @@ private fun CountStat(label: String, count: Int) {
     }
 }
 
+/** Prominent, clearly-weighted status so the shopkeeper always knows the agent is working. */
 @Composable
-private fun TurnStatusHint(turnState: TurnState) {
-    val text = when (turnState) {
-        is TurnState.Listening -> "Listening…"
-        is TurnState.Inferring -> "Thinking…"
-        is TurnState.Validating -> "Checking…"
-        else -> null
+private fun ProcessingBanner(turnState: TurnState) {
+    val extras = KhataThemeExtras.colors
+    data class Status(val text: String?, val spinner: Boolean, val error: Boolean)
+    val status = when (turnState) {
+        is TurnState.Listening -> Status("Listening…", false, false)
+        is TurnState.Inferring -> Status("Reading your entry on-device…", true, false)
+        is TurnState.Retrying -> Status("Rechecking…", true, false)
+        is TurnState.Validating -> Status("Checking the ledger…", true, false)
+        is TurnState.Errored -> Status(turnState.message, false, true)
+        else -> Status(null, false, false)
     }
-    AnimatedVisibility(visible = text != null, enter = fadeIn(), exit = fadeOut()) {
-        Text(
-            text = text ?: "",
-            style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.primary,
-        )
+    AnimatedVisibility(visible = status.text != null, enter = fadeIn(), exit = fadeOut()) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp)
+                .padding(bottom = 10.dp),
+        ) {
+            if (status.spinner) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(20.dp),
+                    strokeWidth = 2.5.dp,
+                    color = MaterialTheme.colorScheme.primary,
+                )
+                Spacer(modifier = Modifier.width(12.dp))
+            }
+            Text(
+                text = status.text ?: "",
+                style = MaterialTheme.typography.titleSmall,
+                color = if (status.error) extras.credit else MaterialTheme.colorScheme.primary,
+            )
+        }
     }
 }
 
@@ -314,9 +347,14 @@ private fun TextEntryBar(enabled: Boolean, onSubmit: (String) -> Unit) {
         keyboardActions = KeyboardActions(onSend = { send() }),
         trailingIcon = {
             IconButton(onClick = send, enabled = enabled) {
-                Icon(Icons.AutoMirrored.Filled.Send, contentDescription = "Send")
+                Icon(Icons.AutoMirrored.Filled.Send, contentDescription = "Send", tint = MaterialTheme.colorScheme.primary)
             }
         },
+        colors = OutlinedTextFieldDefaults.colors(
+            focusedContainerColor = MaterialTheme.colorScheme.surface,
+            unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+            disabledContainerColor = MaterialTheme.colorScheme.surface,
+        ),
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 20.dp),
