@@ -65,9 +65,12 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.ui.platform.LocalContext
 import com.khataagent.agent.AgentOrchestrator
 import com.khataagent.agent.StubInferenceEngine
 import com.khataagent.audio.AudioRecorder
+import com.khataagent.audio.VoiceInput
 import com.khataagent.data.StateBlockBuilderImpl
 import com.khataagent.validate.KhataValidator
 import kotlinx.coroutines.delay
@@ -80,6 +83,7 @@ fun TodayScreen(
     voiceAvailable: () -> Boolean,
     modifier: Modifier = Modifier,
 ) {
+    val context = LocalContext.current
     val viewModel: TodayViewModel = viewModel(
         factory = SimpleViewModelFactory {
             TodayViewModel(repository, orchestrator, audioRecorder, voiceAvailable)
@@ -89,14 +93,28 @@ fun TodayScreen(
     val dailyState by viewModel.dailyState.collectAsState()
     val turnState by viewModel.turnState.collectAsState()
 
+    // Mic = on-device SpeechRecognizer -> transcript -> same Gemma text pipeline as typing.
+    val voiceInput = remember { VoiceInput(context) }
+    DisposableEffect(Unit) { onDispose { voiceInput.destroy() } }
+    var voiceListening by remember { mutableStateOf(false) }
+
     TodayContent(
         transactions = transactions,
         dailyState = dailyState,
         turnState = turnState,
-        voiceEnabled = viewModel.voiceEnabled,
-        onMicPress = viewModel::onMicPress,
-        onMicRelease = viewModel::onMicRelease,
-        onCancelListening = viewModel::onCancelListening,
+        voiceEnabled = voiceInput.available,
+        voiceListening = voiceListening,
+        onMicPress = {
+            if (voiceInput.available) {
+                voiceListening = true
+                voiceInput.start(
+                    onResult = { voiceListening = false; viewModel.onSubmitText(it) },
+                    onError = { voiceListening = false },
+                )
+            }
+        },
+        onMicRelease = { voiceInput.stop() },
+        onCancelListening = { voiceListening = false; voiceInput.stop() },
         onSubmitText = viewModel::onSubmitText,
         onAcceptDeferred = viewModel::onAcceptDeferred,
         onRejectDeferred = viewModel::onRejectDeferred,
@@ -112,6 +130,7 @@ fun TodayContent(
     dailyState: DailyState,
     turnState: TurnState,
     voiceEnabled: Boolean,
+    voiceListening: Boolean = false,
     onMicPress: () -> Unit,
     onMicRelease: () -> Unit,
     onCancelListening: () -> Unit,
@@ -121,7 +140,7 @@ fun TodayContent(
     onAcknowledge: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val isListening = turnState is TurnState.Listening
+    val isListening = voiceListening || turnState is TurnState.Listening
     val isBusy = turnState is TurnState.Inferring || turnState is TurnState.Validating
 
     // Auto-dismiss the committed/rejected toast and return the turn machine to Idle.
