@@ -51,11 +51,36 @@ import com.khataagent.ui.confirm.ConfirmSheet
 import com.khataagent.ui.theme.KhataTheme
 import com.khataagent.ui.theme.KhataThemeExtras
 import com.khataagent.ui.theme.MoneyType
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Send
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.text.input.ImeAction
+import com.khataagent.agent.AgentOrchestrator
+import com.khataagent.agent.StubInferenceEngine
+import com.khataagent.audio.AudioRecorder
+import com.khataagent.data.StateBlockBuilderImpl
+import com.khataagent.validate.KhataValidator
 import kotlinx.coroutines.delay
 
 @Composable
-fun TodayScreen(repository: LedgerRepository, modifier: Modifier = Modifier) {
-    val viewModel: TodayViewModel = viewModel(factory = SimpleViewModelFactory { TodayViewModel(repository) })
+fun TodayScreen(
+    repository: LedgerRepository,
+    orchestrator: AgentOrchestrator,
+    audioRecorder: AudioRecorder,
+    voiceAvailable: () -> Boolean,
+    modifier: Modifier = Modifier,
+) {
+    val viewModel: TodayViewModel = viewModel(
+        factory = SimpleViewModelFactory {
+            TodayViewModel(repository, orchestrator, audioRecorder, voiceAvailable)
+        },
+    )
     val transactions by viewModel.todayTransactions.collectAsState()
     val dailyState by viewModel.dailyState.collectAsState()
     val turnState by viewModel.turnState.collectAsState()
@@ -64,9 +89,11 @@ fun TodayScreen(repository: LedgerRepository, modifier: Modifier = Modifier) {
         transactions = transactions,
         dailyState = dailyState,
         turnState = turnState,
+        voiceEnabled = viewModel.voiceEnabled,
         onMicPress = viewModel::onMicPress,
         onMicRelease = viewModel::onMicRelease,
         onCancelListening = viewModel::onCancelListening,
+        onSubmitText = viewModel::onSubmitText,
         onAcceptDeferred = viewModel::onAcceptDeferred,
         onRejectDeferred = viewModel::onRejectDeferred,
         onAcknowledge = viewModel::onAcknowledge,
@@ -80,9 +107,11 @@ fun TodayContent(
     transactions: List<Transaction>,
     dailyState: DailyState,
     turnState: TurnState,
+    voiceEnabled: Boolean,
     onMicPress: () -> Unit,
     onMicRelease: () -> Unit,
     onCancelListening: () -> Unit,
+    onSubmitText: (String) -> Unit,
     onAcceptDeferred: (ConfirmCard) -> Unit,
     onRejectDeferred: (ConfirmCard) -> Unit,
     onAcknowledge: () -> Unit,
@@ -143,6 +172,14 @@ fun TodayContent(
                 onPressStart = onMicPress,
                 onPressEnd = onMicRelease,
             )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = if (voiceEnabled) "Hold to speak, or type below" else "Type an entry below",
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            TextEntryBar(enabled = !isBusy, onSubmit = onSubmitText)
         }
 
         if (turnState is TurnState.Committed) {
@@ -257,6 +294,35 @@ private fun TurnStatusHint(turnState: TurnState) {
     }
 }
 
+/** The typed "demo insurance" path — same pipeline as voice, downstream is identical. */
+@Composable
+private fun TextEntryBar(enabled: Boolean, onSubmit: (String) -> Unit) {
+    var text by remember { mutableStateOf("") }
+    val send = {
+        if (text.isNotBlank()) {
+            onSubmit(text)
+            text = ""
+        }
+    }
+    OutlinedTextField(
+        value = text,
+        onValueChange = { text = it },
+        enabled = enabled,
+        singleLine = true,
+        placeholder = { Text("e.g. \"Ramesh ko 250 udhaar likho\"") },
+        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Send),
+        keyboardActions = KeyboardActions(onSend = { send() }),
+        trailingIcon = {
+            IconButton(onClick = send, enabled = enabled) {
+                Icon(Icons.AutoMirrored.Filled.Send, contentDescription = "Send")
+            }
+        },
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp),
+    )
+}
+
 @Composable
 private fun CommittedToast(text: String, modifier: Modifier = Modifier, isRejection: Boolean = false) {
     val extras = KhataThemeExtras.colors
@@ -298,7 +364,18 @@ private fun AnimatedLedgerEntry(content: @Composable () -> Unit) {
 @Preview(showBackground = true, name = "Today")
 @Composable
 private fun TodayScreenPreview() {
+    val repo = FakeLedgerRepository()
     KhataTheme {
-        TodayScreen(repository = FakeLedgerRepository())
+        TodayScreen(
+            repository = repo,
+            orchestrator = AgentOrchestrator(
+                engine = StubInferenceEngine(),
+                validator = KhataValidator(),
+                repository = repo,
+                stateBlockBuilder = StateBlockBuilderImpl(repo),
+            ),
+            audioRecorder = AudioRecorder(),
+            voiceAvailable = { false },
+        )
     }
 }

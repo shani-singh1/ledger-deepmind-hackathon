@@ -28,6 +28,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.khataagent.agent.AgentOrchestrator
+import com.khataagent.audio.AudioRecorder
 import com.khataagent.core.AgentStatus
 import com.khataagent.core.data.LedgerRepository
 import com.khataagent.core.escalate.ConnectivityMonitor
@@ -54,6 +56,9 @@ private val bottomDestinations = listOf(KhataDestination.Today, KhataDestination
 @Composable
 fun KhataNav(
     repository: LedgerRepository,
+    orchestrator: AgentOrchestrator,
+    audioRecorder: AudioRecorder,
+    voiceAvailable: () -> Boolean,
     escalationClient: EscalationClient,
     connectivityMonitor: ConnectivityMonitor,
     statusController: AppStatusController,
@@ -107,7 +112,12 @@ fun KhataNav(
             modifier = Modifier.padding(innerPadding),
         ) {
             composable(KhataDestination.Today.route) {
-                TodayScreen(repository = repository)
+                TodayScreen(
+                    repository = repository,
+                    orchestrator = orchestrator,
+                    audioRecorder = audioRecorder,
+                    voiceAvailable = voiceAvailable,
+                )
             }
             composable(KhataDestination.Log.route) {
                 AgentLogScreen(repository = repository)
